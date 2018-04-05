@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">VolleyBallApp</string>
+    <string name="mainTitle_name">Madison Southern VolleyBall</string>
+    <string name="newGame_button">New Game</string>
+    <string name="roster_button">Roster</string>
+    <string name="settings_button">Settings</string>
+    <string name="help_button">Help</string>
+    <string name="home_button">Home</string>
+    <string name="newTeam_button">New Team</string>
+    <string name="deleteTeam_button">Delete</string>
+    <string name="find_button">Find</string>
+    <string name="viewEdit_button">View/Edit</string>
+    <string name="schedule_button">Schedule</string>
+    <string name="stats_button">Stats</string>
+    <string name="contact_button">Contact</string>
+    <string name="back_button">Back</string>
+    <string name="startGame_button">Start Game</string>
+</resources>
