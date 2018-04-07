@@ -1,6 +1,12 @@
 package com.example.android.volleyballapp;
 
-public class Team {
+import java.io.Serializable;
+
+/*
+Team Object will hold Team name, type (i.e. club,high school, middle school),
+and the season that the team's roster will be saved for.
+ */
+public class Team implements Serializable  {
     private String name;
     private String type;
     private String season;
@@ -9,6 +15,10 @@ public class Team {
         name = n;
         type = t;
         season = s;
+    }
+
+    Team(String n){
+        name = n;
     }
     public void addTeam(){
         //add team to database

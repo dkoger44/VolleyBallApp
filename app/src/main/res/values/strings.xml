@@ -15,4 +15,6 @@
     <string name="contact_button">Contact</string>
     <string name="back_button">Back</string>
     <string name="startGame_button">Start Game</string>
+    <string name="playerDetails_title">Player Details</string>
+    <string name="addPhoto_button">Add Photo</string>
 </resources>
