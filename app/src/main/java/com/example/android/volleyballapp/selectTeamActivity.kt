@@ -35,7 +35,7 @@ class selectTeamActivity : AppCompatActivity() {
         //put names into array
         val teamDB = DBHandler(this)
         //val defaultTeam = Team("default team","default type", "2018")
-        var teams = teamDB.readData()
+        var teams = teamDB.readTeamData()
         var list = ArrayList<String>()
         //list.add("defualt team")
         for(i in 0..teams.size-1){
