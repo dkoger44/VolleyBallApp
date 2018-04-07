@@ -28,7 +28,8 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun insertData(team: Team){
+    //inserting value into Team table
+    fun insertTeamData(team: Team){
         val db = this.writableDatabase
         var cv = ContentValues()
         cv.put(COL_NAME,team.getName())
@@ -40,7 +41,14 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         else
             Toast.makeText(context,"Success", Toast.LENGTH_SHORT).show()
     }
-    fun readData() :MutableList<Team>{
+
+    //inserting value into Player Table
+    fun insertPlayerData(team: Team,player: Player){
+
+    }
+
+    //getting all entries in Team table
+    fun readTeamData() :MutableList<Team>{
         var list : MutableList<Team> = ArrayList()
 
         val db = this.readableDatabase
@@ -65,6 +73,8 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return list
     }
+
+
     fun deleteEntry (n: String){
         val selection = COL_NAME+" LIKE "+n
         val db = this.writableDatabase

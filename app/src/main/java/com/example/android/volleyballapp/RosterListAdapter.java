@@ -1,6 +1,7 @@
 package com.example.android.volleyballapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,17 +71,17 @@ public class RosterListAdapter extends BaseAdapter implements ListAdapter {
 
 
         //Handle TextView and display string from your list
-        TextView listItemText = (TextView) view.findViewById(R.id.teamNameRosterList);
+        final TextView listItemText = (TextView) view.findViewById(R.id.teamNameRosterList);
         listItemText.setText(list.get(position));
 
 
         //Handle buttons and add onClickListeners
 
-        /* TEST FOR CROWDED LAYOUT
+        // TEST FOR CROWDED LAYOUT
         Button viewEditTeamBtn = (Button) view.findViewById(R.id.viewEditTeamButton);
-        Button scheduleBtn = (Button) view.findViewById(R.id.scheduleButton);
-        Button statsBtn = (Button) view.findViewById(R.id.statsButton);
-        */
+        //Button scheduleBtn = (Button) view.findViewById(R.id.scheduleButton);
+        //Button statsBtn = (Button) view.findViewById(R.id.statsButton);
+
 
 
         //These are the buttonClick listeners that will be able to do things when the View/Edit..etc
@@ -92,16 +93,28 @@ public class RosterListAdapter extends BaseAdapter implements ListAdapter {
 
             }
         });
-        /*
+
         viewEditTeamBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //do something
                 //or some other task
-                Toast.makeText(context,"HEY View edit team btn",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"The team name is: "+listItemText.getText().toString(),Toast.LENGTH_SHORT).show();
+
+                //Creating team object based on team name
+                //passing team object to AddPlayerActivity to practice serializable classes
+                String teamName = listItemText.getText().toString();
+                Team selTeam = new Team(teamName);
+
+                Intent addPlayerToTeam = new Intent(v.getContext(),AddPlayerActivity.class);
+                addPlayerToTeam.putExtra("TeamObject",selTeam);
+                v.getContext().startActivity(addPlayerToTeam);
+
+
 
             }
         });
+        /*
         scheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
