@@ -5,6 +5,7 @@ package com.example.android.volleyballapp;
 Player object will hold Player name, number, and related methods
  */
 public class Player {
+    private int ID;
     private String firstName;
     private String lastName;
     private int number;
@@ -14,6 +15,13 @@ public class Player {
     //that it can be displayed
 
     //constructor
+    Player(int id, String fN, String lN, int num, String gL){
+        ID = id;
+        firstName = fN;
+        lastName = lN;
+        number = num;
+        gradeLevel = gL;
+    }
     Player(String fN, String lN, int num, String gL){
         firstName = fN;
         lastName = lN;
@@ -22,6 +30,7 @@ public class Player {
 
         //will need to also assign picture information in constructor as well
     }
+
     //setters
     public void setFirstName(String firstName) {
         this.firstName = firstName;
