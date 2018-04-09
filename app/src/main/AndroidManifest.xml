@@ -20,7 +20,8 @@
         <activity android:name=".HelpActivity" />
         <activity android:name=".AddTeamActivity" />
         <activity android:name=".selectTeamActivity" />
-        <activity android:name=".AddPlayerActivity"></activity>
+        <activity android:name=".AddPlayerActivity" />
+        <activity android:name=".ViewTeamRosterActivity"></activity>
     </application>
 
 </manifest>

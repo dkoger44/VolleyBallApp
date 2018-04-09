@@ -20,7 +20,7 @@ val COL_PLAYER_GRADE = "grade"
 val COL_PLAYER_TEAM_NAME = "teamName"
 val COL_ID = "id"
 
-class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,null,2){
+class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,null,1){
     override fun onCreate(db: SQLiteDatabase?){
         val createTeamTable = "CREATE TABLE "+ TEAM_TABLE_NAME + " (" +
                 COL_TEAM_NAME +" VARCHAR(50) PRIMARY KEY," +
@@ -130,7 +130,6 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     //getting all players of a team from the Player Table
-    /*
     fun readPlayerData(team: Team) :MutableList<Player>{
         var list : MutableList<Player> = ArrayList()
         val db = this.readableDatabase
@@ -145,10 +144,14 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 var ln = cursor.getString(2).toString()
                 var jn = cursor.getString(3).toString()
                 var pg = cursor.getString(4).toString()
-                //var player = Player()
-            }
+                var player = Player(id.toInt(),fn,ln,jn.toInt(),pg)
+                list.add(player)
+            }while(cursor.moveToNext())
         }
-    }*/
+        cursor.close()
+        db.close()
+        return list
+    }
 
 
     fun deleteEntry (n: String){

@@ -106,9 +106,13 @@ public class RosterListAdapter extends BaseAdapter implements ListAdapter {
                 String teamName = listItemText.getText().toString();
                 Team selTeam = new Team(teamName);
 
-                Intent addPlayerToTeam = new Intent(v.getContext(),AddPlayerActivity.class);
-                addPlayerToTeam.putExtra("TeamObject",selTeam);
-                v.getContext().startActivity(addPlayerToTeam);
+                Intent viewTeamRoster = new Intent(v.getContext(), ViewTeamRosterActivity.class);
+                viewTeamRoster.putExtra("TeamObject",selTeam);
+                v.getContext().startActivity(viewTeamRoster);
+
+                //Intent addPlayerToTeam = new Intent(v.getContext(),AddPlayerActivity.class);
+                //addPlayerToTeam.putExtra("TeamObject",selTeam);
+                //v.getContext().startActivity(addPlayerToTeam);
 
 
 
