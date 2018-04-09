@@ -91,7 +91,7 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         var cv = ContentValues()
         cv.put(COL_PLAYER_FIRST_NAME, player.getFirstName())
         cv.put(COL_PLAYER_LAST_NAME, player.getLastName())
-        cv.put(COL_PLAYER_JERSEY, player.getNumber())
+        cv.put(COL_PLAYER_JERSEY, player.getNumber().toString())
         cv.put(COL_PLAYER_GRADE, player.getGradeLevel())
         cv.put(COL_PLAYER_TEAM_NAME, team.getName())
 
@@ -133,23 +133,28 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun readPlayerData(team: Team) :MutableList<Player>{
         var list : MutableList<Player> = ArrayList()
         val db = this.readableDatabase
-        var teamName = arrayOf(team.getName())
-        val projection = arrayOf(COL_PLAYER_ID, COL_PLAYER_FIRST_NAME, COL_PLAYER_LAST_NAME, COL_PLAYER_JERSEY, COL_PLAYER_GRADE)
+        if(team.getName()!= null) {
 
-        val cursor = db.query(PLAYER_TABLE_NAME, projection, COL_PLAYER_TEAM_NAME, teamName, null, null, null)
-        if(cursor.moveToFirst()){
-            do{
-                var id = cursor.getString(0).toString()
-                var fn = cursor.getString(1).toString()
-                var ln = cursor.getString(2).toString()
-                var jn = cursor.getString(3).toString()
-                var pg = cursor.getString(4).toString()
-                var player = Player(id.toInt(),fn,ln,jn.toInt(),pg)
-                list.add(player)
-            }while(cursor.moveToNext())
+
+            var teamName = arrayOf(team.getName())
+            val projection = arrayOf(COL_PLAYER_ID, COL_PLAYER_FIRST_NAME, COL_PLAYER_LAST_NAME, COL_PLAYER_JERSEY, COL_PLAYER_GRADE)
+
+            //ERROR ON THIS LINE CAUSES CRASH
+            val cursor = db.query(PLAYER_TABLE_NAME, projection, COL_PLAYER_TEAM_NAME, teamName, null, null, null)
+            if (cursor.moveToFirst()) {
+                do {
+                    var id = cursor.getString(0).toString()
+                    var fn = cursor.getString(1).toString()
+                    var ln = cursor.getString(2).toString()
+                    var jn = cursor.getString(3).toString()
+                    var pg = cursor.getString(4).toString()
+                    var player = Player(id.toInt(), fn, ln, jn.toInt(), pg)
+                    list.add(player)
+                } while (cursor.moveToNext())
+            }
+            cursor.close()
+            db.close()
         }
-        cursor.close()
-        db.close()
         return list
     }
 
