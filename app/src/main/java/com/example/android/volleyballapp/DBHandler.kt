@@ -135,12 +135,12 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = this.readableDatabase
         if(team.getName()!= null) {
 
-
+            val selection = COL_PLAYER_TEAM_NAME +" =?"
             var teamName = arrayOf(team.getName())
             val projection = arrayOf(COL_PLAYER_ID, COL_PLAYER_FIRST_NAME, COL_PLAYER_LAST_NAME, COL_PLAYER_JERSEY, COL_PLAYER_GRADE)
 
             //ERROR ON THIS LINE CAUSES CRASH
-            val cursor = db.query(PLAYER_TABLE_NAME, projection, COL_PLAYER_TEAM_NAME, teamName, null, null, null)
+            val cursor = db.query(PLAYER_TABLE_NAME, projection, selection, teamName, null, null, null)
             if (cursor.moveToFirst()) {
                 do {
                     var id = cursor.getString(0).toString()
