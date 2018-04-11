@@ -9,23 +9,45 @@ import android.widget.Toast
 val DATABASE_NAME = "VolleyBall"
 val TEAM_TABLE_NAME = "teams"
 val PLAYER_TABLE_NAME = "player"
+val GAME_TABLE_NAME = "game"
+val SCHEDULE_TABLE_NAME = "schedule"
 val COL_TEAM_NAME = "name"
 val COL_TEAM_TYPE = "type"
 val COL_TEAM_SEASON = "season"
+val COL_TEAM_SCHEDULEID = "scheduleID"
 val COL_PLAYER_ID = "id"
 val COL_PLAYER_FIRST_NAME = "fName"
 val COL_PLAYER_LAST_NAME = "lName"
 val COL_PLAYER_JERSEY = "jerseyNum"
 val COL_PLAYER_GRADE = "grade"
 val COL_PLAYER_TEAM_NAME = "teamName"
-val COL_ID = "id"
+val COL_GAME_GAMEID = "gameID"
+val COL_GAME_DATE = "date"
+val COL_GAME_LOCATION = "location"
+val COL_GAME_OPPONENT = "opponent"
+val COL_GAME_SCHEDULEID = "scheduleID"
+val COL_SCHEDULE_ID = "id"
+val COL_SCHEDULE_TEAMNAME = "teamName"
 
 class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,null,1){
     override fun onCreate(db: SQLiteDatabase?){
+       /*
+        val dropTEAMTable = "DROP TABLE "+ TEAM_TABLE_NAME
+        val dropPlayerTable = "DROP TABLE " + PLAYER_TABLE_NAME
+        val dropGameTable = "DROP TABLE " + GAME_TABLE_NAME
+        val dropScheduleTable = "DROP TABLE " + SCHEDULE_TABLE_NAME
+        db?.execSQL(dropTEAMTable)
+        db?.execSQL(dropPlayerTable)
+        db?.execSQL(dropGameTable)
+        db?.execSQL(dropScheduleTable)
+*/
         val createTeamTable = "CREATE TABLE "+ TEAM_TABLE_NAME + " (" +
                 COL_TEAM_NAME +" VARCHAR(50) PRIMARY KEY," +
                 COL_TEAM_TYPE + " VARCHAR(50)," +
-                COL_TEAM_SEASON + " VARCHAR(4))"
+                COL_TEAM_SEASON + " VARCHAR(4)," +
+                COL_TEAM_SCHEDULEID + " INTEGER, " +
+                "FOREIGN KEY(" + COL_TEAM_SCHEDULEID + ") REFERENCES " +
+                SCHEDULE_TABLE_NAME + "(" + COL_SCHEDULE_ID + "))"
 //COL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
         db?.execSQL(createTeamTable)
 
@@ -40,6 +62,26 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 TEAM_TABLE_NAME +"(" + COL_TEAM_NAME + "))"
 
         db?.execSQL(createPlayerTable)
+
+        val createGameTable = "CREATE TABLE "+ GAME_TABLE_NAME + " (" +
+                COL_GAME_GAMEID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_GAME_DATE + " TEXT," +
+                COL_GAME_LOCATION + " VARCHAR(50)," +
+                COL_GAME_OPPONENT + " VARCHAR(50)," +
+                COL_GAME_SCHEDULEID + " INTEGER, " +
+                "FOREIGN KEY(" + COL_GAME_SCHEDULEID + ") REFERENCES " +
+                SCHEDULE_TABLE_NAME + "(" + COL_SCHEDULE_ID + "))"
+
+        db?.execSQL(createGameTable)
+
+        val createScheduleTable = "CREATE TABLE " + SCHEDULE_TABLE_NAME + " (" +
+                COL_SCHEDULE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_SCHEDULE_TEAMNAME + " VARCHAR(50), " +
+                "FOREIGN KEY(" + COL_SCHEDULE_TEAMNAME + ") REFERENCES " +
+                TEAM_TABLE_NAME + "(" + COL_TEAM_NAME + "))"
+
+        db?.execSQL(createScheduleTable)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -47,13 +89,20 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         // recreate table names
         val dropTEAMTable = "DROP TABLE "+ TEAM_TABLE_NAME
         val dropPlayerTable = "DROP TABLE " + PLAYER_TABLE_NAME
+        val dropGameTable = "DROP TABLE " + GAME_TABLE_NAME
+        val dropScheduleTable = "DROP TABLE " + SCHEDULE_TABLE_NAME
         db?.execSQL(dropTEAMTable)
         db?.execSQL(dropPlayerTable)
+        db?.execSQL(dropGameTable)
+        db?.execSQL(dropScheduleTable)
 
         val createTeamTable = "CREATE TABLE "+ TEAM_TABLE_NAME + " (" +
                 COL_TEAM_NAME +" VARCHAR(50) PRIMARY KEY," +
                 COL_TEAM_TYPE + " VARCHAR(50)," +
-                COL_TEAM_SEASON + " VARCHAR(4))"
+                COL_TEAM_SEASON + " VARCHAR(4)," +
+                COL_TEAM_SCHEDULEID + " INTEGER, " +
+                "FOREIGN KEY(" + COL_TEAM_SCHEDULEID + ") REFERENCES " +
+                SCHEDULE_TABLE_NAME + "(" + COL_SCHEDULE_ID + "))"
 
         db?.execSQL(createTeamTable)
 
@@ -68,6 +117,25 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 TEAM_TABLE_NAME +"(" + COL_TEAM_NAME + "))"
 
         db?.execSQL(createPlayerTable)
+
+        val createGameTable = "CREATE TABLE "+ GAME_TABLE_NAME + " (" +
+                COL_GAME_GAMEID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_GAME_DATE + " TEXT," +
+                COL_GAME_LOCATION + " VARCHAR(50)," +
+                COL_GAME_OPPONENT + " VARCHAR(50)," +
+                COL_GAME_SCHEDULEID + " INTEGER, " +
+                "FOREIGN KEY(" + COL_GAME_SCHEDULEID + ") REFERENCES " +
+                SCHEDULE_TABLE_NAME + "(" + COL_SCHEDULE_ID + "))"
+
+        db?.execSQL(createGameTable)
+
+        val createScheduleTable = "CREATE TABLE " + SCHEDULE_TABLE_NAME + " (" +
+                COL_SCHEDULE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_SCHEDULE_TEAMNAME + " VARCHAR(50), " +
+                "FOREIGN KEY(" + COL_SCHEDULE_TEAMNAME + ") REFERENCES " +
+                TEAM_TABLE_NAME + "(" + COL_TEAM_NAME + "))"
+
+        db?.execSQL(createScheduleTable)
 
     }
 
@@ -139,7 +207,6 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             var teamName = arrayOf(team.getName())
             val projection = arrayOf(COL_PLAYER_ID, COL_PLAYER_FIRST_NAME, COL_PLAYER_LAST_NAME, COL_PLAYER_JERSEY, COL_PLAYER_GRADE)
 
-            //ERROR ON THIS LINE CAUSES CRASH
             val cursor = db.query(PLAYER_TABLE_NAME, projection, selection, teamName, null, null, null)
             if (cursor.moveToFirst()) {
                 do {
