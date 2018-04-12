@@ -19,4 +19,6 @@
     <string name="addPhoto_button">Add Photo</string>
     <string name="addPlayer_button">Add Player</string>
     <string name="playerEditDetails_button">Edit Details</string>
+    <string name="addGame_Button">Add Game</string>
+    <string name="deleteGame_Button">Delete Game</string>
 </resources>

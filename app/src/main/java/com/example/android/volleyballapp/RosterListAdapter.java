@@ -79,7 +79,7 @@ public class RosterListAdapter extends BaseAdapter implements ListAdapter {
 
         // TEST FOR CROWDED LAYOUT
         Button viewEditTeamBtn = (Button) view.findViewById(R.id.viewEditTeamButton);
-        //Button scheduleBtn = (Button) view.findViewById(R.id.scheduleButton);
+        Button scheduleBtn = (Button) view.findViewById(R.id.scheduleButton);
         //Button statsBtn = (Button) view.findViewById(R.id.statsButton);
 
 
@@ -118,15 +118,22 @@ public class RosterListAdapter extends BaseAdapter implements ListAdapter {
 
             }
         });
-        /*
+
         scheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //do something
+                //Creating team object based on team name
+                //passing team object to AddPlayerActivity to practice serializable classes
+                String teamName = listItemText.getText().toString();
+                Team selTeam = new Team(teamName);
 
+                Intent viewSchedule = new Intent(v.getContext(), ViewScheduleActivity.class);
+                viewSchedule.putExtra("TeamObject",selTeam);
+                v.getContext().startActivity(viewSchedule);
             }
         });
-
+    /*
         statsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
