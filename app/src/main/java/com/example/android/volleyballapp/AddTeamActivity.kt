@@ -1,10 +1,12 @@
 package com.example.android.volleyballapp
 
+import android.app.ProgressDialog.show
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.view.View
+import android.widget.*
+import java.time.Year
+import java.util.*
 
 class AddTeamActivity : AppCompatActivity() {
 
@@ -12,14 +14,32 @@ class AddTeamActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_team)
 
+        var teamTypes = arrayOf("Varsity", "Junior Varsity", "Freshmen", "Club")
+
         val context = this
         val addTeamBtn = findViewById<Button>(R.id.addTeamButton) as Button
         val teamNameView = findViewById<EditText>(R.id.teamNameTextBox) as EditText
-        val teamTypeView = findViewById<EditText>(R.id.teamTypeTextBox) as EditText
+        val teamTypeSpinner = findViewById<Spinner>(R.id.teamTypeSpinner) as Spinner
+        val teamSpinnerAdapter = ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, teamTypes)
+        var selectedType = 0;
+        teamTypeSpinner.setAdapter(teamSpinnerAdapter)
+
+        teamTypeSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                selectedType = position;
+                //Toast.makeText(context, teamTypes[selectedType]+" was selected",Toast.LENGTH_SHORT).show()
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        }
+
         addTeamBtn.setOnClickListener({
-            if(teamNameView.text.toString().length > 0 &&
-                    teamTypeView.text.toString().length > 0){
-                val team = Team(teamNameView.text.toString(),teamTypeView.text.toString(),"2018")
+            if(teamNameView.text.toString().length>0){
+                val year = Calendar.getInstance().get(Calendar.YEAR)
+                val team = Team(teamNameView.text.toString(),teamTypes[selectedType],year.toString())
                 var db = DBHandler(context)
                 db.insertTeamData(team)
                 finish()
@@ -29,4 +49,5 @@ class AddTeamActivity : AppCompatActivity() {
 
         })
     }
+
 }

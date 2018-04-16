@@ -2,8 +2,8 @@ package com.example.android.volleyballapp
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
+import android.view.View
+import android.widget.*
 
 class AddPlayerActivity : AppCompatActivity() {
 
@@ -21,15 +21,30 @@ class AddPlayerActivity : AppCompatActivity() {
         //declareing text fields, spinners, and buttons
         val playerFName = findViewById<EditText>(R.id.playerFNameEditText) as EditText
         val playerLName = findViewById<EditText>(R.id.playerLNameEditText) as EditText
-        //get player number
-        //get player gradeLevel
+        val playerJerNum = findViewById<EditText>(R.id.playerJerseyNumber) as EditText
+
+        val gradeLevels = arrayOf("7th", "8th","Freshman","Sophomore","Junior","Senior")
+        val gradeLevelSpinner = findViewById<Spinner>(R.id.gradeLevelSpinner) as Spinner
+        val gradeSpinnerAdapter = ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, gradeLevels)
+        gradeLevelSpinner.setAdapter(gradeSpinnerAdapter)
+        var selectedGrade = 0
+
+        gradeLevelSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            selectedGrade = position
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        }
         val addPlayer = findViewById<Button>(R.id.addPlayerButton) as Button
 
         //button onClick listeners
         addPlayer.setOnClickListener({
             //verify that the user has input in valid data
-            if(playerFName.text.toString().length > 0 && playerLName.text.toString().length > 0){
-                val player = Player(playerFName.text.toString(),playerLName.text.toString(),44,"Senior")
+            if(playerFName.text.toString().length > 0 && playerLName.text.toString().length > 0 && playerJerNum.text.toString().length > 0){
+                val player = Player(playerFName.text.toString(),playerLName.text.toString(),playerJerNum.text.toString().toInt(),gradeLevels[selectedGrade])
                 var db = DBHandler(context)
                 db.insertPlayerData(selTeam,player)
                 finish()
