@@ -69,9 +69,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:ems="10"
+        android:hint="Enter First Name"
         android:inputType="textPersonName"
         android:maxLength="50"
-        android:text="Fname"
         android:textIsSelectable="false"
         app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -118,9 +118,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:ems="10"
+        android:hint="Enter Last Name"
         android:inputType="textPersonName"
         android:maxLength="50"
-        android:text="Lname"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/playerFNameEditText" />
 
@@ -143,6 +143,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:ems="10"
+        android:hint="Enter Number"
         android:inputType="number"
         android:maxLength="2"
         app:layout_constraintEnd_toEndOf="parent"
