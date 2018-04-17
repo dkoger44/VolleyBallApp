@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.volleyballapp.AddTeamActivity">
 
+    <LinearLayout
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"></LinearLayout>
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"

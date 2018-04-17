@@ -1,9 +1,14 @@
 package com.example.android.volleyballapp
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+
 
 class AddPlayerActivity : AppCompatActivity() {
 
@@ -53,7 +58,11 @@ class AddPlayerActivity : AppCompatActivity() {
                 Toast.makeText(context,"Please enter Name and Player Number!",Toast.LENGTH_SHORT).show()
             }
         })
+        val background = findViewById<LinearLayout>(R.id.background) as LinearLayout
+        background.setOnClickListener({
+            val inputManager:InputMethodManager =getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(currentFocus.windowToken, InputMethodManager.SHOW_FORCED)
 
-
+        })
     }
 }
