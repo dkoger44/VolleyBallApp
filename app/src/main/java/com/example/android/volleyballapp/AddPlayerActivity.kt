@@ -49,6 +49,9 @@ class AddPlayerActivity : AppCompatActivity() {
                 db.insertPlayerData(selTeam,player)
                 finish()
             }
+            else{
+                Toast.makeText(context,"Please enter Name and Player Number!",Toast.LENGTH_SHORT).show()
+            }
         })
 
 
