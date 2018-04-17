@@ -49,6 +49,11 @@ public class Player {
     }
 
     //getters
+
+    public int getID() {
+        return ID;
+    }
+
     public String getFirstName(){
         return firstName;
     }
