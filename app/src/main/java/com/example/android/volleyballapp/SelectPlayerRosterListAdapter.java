@@ -1,6 +1,7 @@
 package com.example.android.volleyballapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +11,18 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class SelectPlayerRosterListAdapter extends BaseAdapter implements ListAdapter {
     private ArrayList<String> list = new ArrayList<String>();
+    private ArrayList<String> ids = new ArrayList<String>();
     private Context context;
 
-    public SelectPlayerRosterListAdapter(ArrayList<String> list, Context context) {
+    public SelectPlayerRosterListAdapter(ArrayList<String> list,ArrayList<String> ids, Context context) {
         this.list = list;
+        this.ids = ids;
         this.context = context;
     }
 
@@ -52,6 +57,8 @@ public class SelectPlayerRosterListAdapter extends BaseAdapter implements ListAd
         //Handle TextView and display string from your list
         final TextView listItemText = (TextView) view.findViewById(R.id.playerNameRosterList);
         listItemText.setText(list.get(position));
+        final TextView listItemID = (TextView) view.findViewById(R.id.playerID);
+        listItemID.setText(ids.get(position));
 
         Button editPlayerBtn = (Button) view.findViewById(R.id.editPlayerButton);
         Button playerStatsBtn = (Button) view.findViewById(R.id.playerStatsButton);
@@ -69,6 +76,14 @@ public class SelectPlayerRosterListAdapter extends BaseAdapter implements ListAd
         editPlayerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Creating team object based on team name
+                //passing team object to AddPlayerActivity to practice serializable classes
+                String playerID = listItemID.getText().toString();
+
+
+                Intent editPlayerDetails = new Intent(v.getContext(), editPlayerDetailsActivity.class);
+                editPlayerDetails.putExtra("PlayerID",playerID);
+                v.getContext().startActivity(editPlayerDetails);
 
             }
         });

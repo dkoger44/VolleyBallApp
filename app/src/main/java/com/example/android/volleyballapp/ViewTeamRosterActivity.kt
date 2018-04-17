@@ -63,14 +63,17 @@ class ViewTeamRosterActivity : AppCompatActivity() {
         //val defaultTeam = Team("default team","default type", "2018")
         var players = playerDB.readPlayerData(teamName)
         var list = ArrayList<String>()
+        var idList = ArrayList<String>()
         //list.add("defualt team")
         for(i in 0..players.size-1){
             var playerFullName = players.get(i).getFirstName() + " " + players.get(i).getLastName()
+            var playerID = players.get(i).getID()
             list.add(playerFullName)
+            idList.add(playerID.toString())
         }
 
         //attaching listView to arrayAdapter
-        val adapter = SelectPlayerRosterListAdapter(list,this)
+        val adapter = SelectPlayerRosterListAdapter(list,idList,this)
 
         val lView = findViewById<ListView>(R.id.playerList)
 

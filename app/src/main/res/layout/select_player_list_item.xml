@@ -36,6 +36,14 @@
 
                 tools:layout_editor_absoluteX="123dp"
                 tools:layout_editor_absoluteY="151dp" />
+
+            <TextView
+                android:id="@+id/playerID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="TextView"
+                android:visibility="invisible" />
         </LinearLayout>
 
         <LinearLayout

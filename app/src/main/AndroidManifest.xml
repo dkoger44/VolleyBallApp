@@ -22,7 +22,8 @@
         <activity android:name=".selectTeamActivity" />
         <activity android:name=".AddPlayerActivity" />
         <activity android:name=".ViewTeamRosterActivity" />
-        <activity android:name=".ViewScheduleActivity"></activity>
+        <activity android:name=".ViewScheduleActivity" />
+        <activity android:name=".editPlayerDetailsActivity"></activity>
     </application>
 
 </manifest>

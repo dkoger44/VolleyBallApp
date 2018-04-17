@@ -5,6 +5,9 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
+import android.provider.SyncStateContract.Helpers.update
+
+
 
 val DATABASE_NAME = "VolleyBall"
 val TEAM_TABLE_NAME = "teams"
@@ -151,6 +154,7 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             Toast.makeText(context,"Team Name Already Exists",Toast.LENGTH_LONG).show()
         else
             Toast.makeText(context,"Success", Toast.LENGTH_SHORT).show()
+        db.close()
     }
 
     //inserting value into Player Table
@@ -168,6 +172,21 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             Toast.makeText(context,"ERROR ADDING PLAYER", Toast.LENGTH_LONG).show()
         else
             Toast.makeText(context,"Player added to team", Toast.LENGTH_SHORT).show()
+        db.close()
+    }
+
+    //updating player data by playerID in Player Table
+    fun updatePlayerData(player: Player){
+        val db = this.writableDatabase
+        var cv = ContentValues()
+        cv.put(COL_PLAYER_FIRST_NAME, player.getFirstName())
+        cv.put(COL_PLAYER_LAST_NAME, player.getLastName())
+        cv.put(COL_PLAYER_JERSEY, player.getNumber())
+        cv.put(COL_PLAYER_GRADE, player.getGradeLevel())
+        val selection = COL_PLAYER_ID+"=?"
+        val selectionArgs = arrayOf(player.getID().toString())
+        db.update(PLAYER_TABLE_NAME,cv,selection,selectionArgs)
+        db.close()
     }
 
     //getting all entries in Team table
@@ -224,8 +243,34 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
         return list
     }
+    //get specific player data from Player Table
+    fun readSinglePlayerData(playerID: String) :MutableList<Player>{
+        var list : MutableList<Player> = ArrayList()
+        val db = this.readableDatabase
+        if(playerID != null){
+            val selection = COL_PLAYER_ID + " =?"
+            var playerIDNUM = arrayOf(playerID)
+            val projection = arrayOf(COL_PLAYER_ID, COL_PLAYER_FIRST_NAME, COL_PLAYER_LAST_NAME, COL_PLAYER_JERSEY, COL_PLAYER_GRADE)
 
+            val cursor = db.query(PLAYER_TABLE_NAME, projection, selection, playerIDNUM, null, null, null)
+            if(cursor.moveToFirst()){
+                do{
+                    var id = cursor.getString(0).toString()
+                    var fn = cursor.getString(1).toString()
+                    var ln = cursor.getString(2).toString()
+                    var jn = cursor.getString(3).toString()
+                    var pg = cursor.getString(4).toString()
+                    var player = Player(id.toInt(), fn, ln, jn.toInt(), pg)
+                    list.add(player)
+                }while(cursor.moveToNext())
+            }
+            cursor.close()
+            db.close()
+        }
+        return list
+    }
 
+    //TODO Clean this up and make sure the delete statement works after getting list onSelectedListeners working
     fun deleteEntry (n: String){
         val selection = COL_TEAM_NAME+" LIKE "+n
         val db = this.writableDatabase
@@ -233,6 +278,6 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         sA.add(n)
         Toast.makeText(context,""+n,Toast.LENGTH_SHORT).show()
         db.delete(TEAM_TABLE_NAME, COL_TEAM_NAME+"=?", arrayOf(n.toString()))
-
+        db.close()
     }
 }
