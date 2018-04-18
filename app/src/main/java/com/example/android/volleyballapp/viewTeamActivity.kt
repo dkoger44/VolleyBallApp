@@ -1,6 +1,5 @@
 package com.example.android.volleyballapp
 
-import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -9,8 +8,9 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 
-class viewTeamActivity : AppCompatActivity() {
 
+class viewTeamActivity : AppCompatActivity() {
+    var deleteTeamName = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_team)
@@ -20,6 +20,7 @@ class viewTeamActivity : AppCompatActivity() {
         val helpBtn = findViewById<Button>(R.id.rosterHelpButton) as Button
         val newTeamBtn = findViewById<Button>(R.id.newTeamButton) as Button
         val deleteTeamBtn = findViewById<Button>(R.id.deleteTeamButton) as Button
+
         //setting Button onClick listeners
         homeBtn.setOnClickListener({
             finish()
@@ -36,22 +37,22 @@ class viewTeamActivity : AppCompatActivity() {
             startActivity(intent)
         })
         deleteTeamBtn.setOnClickListener({
-            var context = applicationContext
-            Toast.makeText(context,"Delete Button Hit",Toast.LENGTH_SHORT).show()
-            val teamDB = DBHandler(this)
+            //var context = applicationContext
+            //Toast.makeText(context,"Delete Button Hit",Toast.LENGTH_SHORT).show()
+            //val teamDB = DBHandler(this)
             //need to pass team name to be deleted
             //possibly will need to send ID of the team being deleted
-            teamDB.deleteEntry("default team")
-
+            //teamDB.deleteTeamEntry("default team")
+            if(deleteTeamName != "") {
+                val teamDB = DBHandler(this)
+                teamDB.deleteTeamEntry(deleteTeamName)
+                onResume()
+            }
         })
-
-
-
     }
 
     override fun onResume() {
         super.onResume()
-
         //need to make connection to database to get team names
         //put names into array
         val teamDB = DBHandler(this)
@@ -86,10 +87,10 @@ class viewTeamActivity : AppCompatActivity() {
         //      IF I take buttons off of the team_rooster_list_item.xml file then the lView Clicklistener works
         lView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val item = parent.getItemAtPosition(position) as String
-
-
+            deleteTeamName = item
             Toast.makeText(this, "HEY list item clicked", Toast.LENGTH_SHORT).show()
         }
+
         //lView.onItemClickListener.onItemClick(AdapterView<?> RosterListAdapter,)
     }
 }

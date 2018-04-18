@@ -89,6 +89,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="@string/startGame_button" />
+
     </RelativeLayout>
 
 

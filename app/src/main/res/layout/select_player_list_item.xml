@@ -57,14 +57,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/playerEditDetails_button" />
+                android:text="@string/playerEditDetails_button"
+                android:focusable="false"/>
 
             <Button
                 android:id="@+id/playerStatsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/stats_button" />
+                android:text="@string/stats_button"
+                android:focusable="false"/>
         </LinearLayout>
 
     </LinearLayout>

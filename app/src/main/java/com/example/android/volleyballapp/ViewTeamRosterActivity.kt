@@ -4,10 +4,12 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.content.Intent
+import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.Toast
 
 class ViewTeamRosterActivity : AppCompatActivity() {
-
+    var deletePlayerId = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_team_roster)
@@ -29,6 +31,14 @@ class ViewTeamRosterActivity : AppCompatActivity() {
         helpBtn.setOnClickListener({
             val intent = Intent(this, HelpActivity::class.java )
             startActivity(intent)
+        })
+        deletePlayerBtn.setOnClickListener({
+            if(deletePlayerId!=""){
+                val playerDB = DBHandler(this)
+                Toast.makeText(this, "deleltePlayerId is: "+deletePlayerId, Toast.LENGTH_SHORT).show()
+                playerDB.deletePlayerEntry(deletePlayerId)
+                onResume()
+            }
         })
 
         /*newPlayerBtn.setOnClickListener({
@@ -55,8 +65,6 @@ class ViewTeamRosterActivity : AppCompatActivity() {
 
         })
 
-
-
         //need to make connection to database to get player names
         //put names into array
         val playerDB = DBHandler(this)
@@ -78,5 +86,11 @@ class ViewTeamRosterActivity : AppCompatActivity() {
         val lView = findViewById<ListView>(R.id.playerList)
 
         lView.adapter = adapter;
+
+        lView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            val item = parent.getItemAtPosition(position) as String
+            deletePlayerId = item
+            Toast.makeText(this, "HEY list item clicked", Toast.LENGTH_SHORT).show()
+        }
     }
 }
