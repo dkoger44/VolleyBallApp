@@ -34,7 +34,7 @@ public class SelectPlayerRosterListAdapter extends BaseAdapter implements ListAd
 
     @Override
     public Object getItem(int pos) {
-        return list.get(pos);
+        return ids.get(pos);
     }
 
     @Override

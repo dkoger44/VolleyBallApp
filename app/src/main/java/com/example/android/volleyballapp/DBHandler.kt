@@ -139,9 +139,7 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 TEAM_TABLE_NAME + "(" + COL_TEAM_NAME + "))"
 
         db?.execSQL(createScheduleTable)
-
     }
-
     //inserting value into Team table
     fun insertTeamData(team: Team){
         val db = this.writableDatabase
@@ -270,14 +268,62 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return list
     }
 
-    //TODO Clean this up and make sure the delete statement works after getting list onSelectedListeners working
-    fun deleteEntry (n: String){
+    //This fun is so that the deleteTeamEntry can query the database twice before closing the connection
+    fun readPlayerDataForTeamDelete(team: Team) :MutableList<Player>{
+        var list : MutableList<Player> = ArrayList()
+        val db = this.readableDatabase
+        if(team.getName()!= null) {
+
+            val selection = COL_PLAYER_TEAM_NAME +" =?"
+            var teamName = arrayOf(team.getName())
+            val projection = arrayOf(COL_PLAYER_ID, COL_PLAYER_FIRST_NAME, COL_PLAYER_LAST_NAME, COL_PLAYER_JERSEY, COL_PLAYER_GRADE)
+
+            val cursor = db.query(PLAYER_TABLE_NAME, projection, selection, teamName, null, null, null)
+            if (cursor.moveToFirst()) {
+                do {
+                    var id = cursor.getString(0).toString()
+                    var fn = cursor.getString(1).toString()
+                    var ln = cursor.getString(2).toString()
+                    var jn = cursor.getString(3).toString()
+                    var pg = cursor.getString(4).toString()
+                    var player = Player(id.toInt(), fn, ln, jn.toInt(), pg)
+                    list.add(player)
+                } while (cursor.moveToNext())
+            }
+            cursor.close()
+        }
+        return list
+    }
+
+    //deletes entire team from database. This will also cause players on that team to be deleted
+    fun deleteTeamEntry (n: String){
         val selection = COL_TEAM_NAME+" LIKE "+n
         val db = this.writableDatabase
         var sA = ArrayList<String>()
         sA.add(n)
+        //getting team object so that we can get the players on the team
+        val teamToDelete = Team(n)
+        //getting the players on the team so that we can delete them
+        var playerArray = readPlayerDataForTeamDelete(teamToDelete)
+        //for loop will delete each player on the team from the database
+        if(playerArray.size>0) {
+            for (i in 0..playerArray.size) {
+                val playersID = playerArray.get(i).getID()
+                deletePlayerEntry(playersID.toString())
+            }
+        }
         Toast.makeText(context,""+n,Toast.LENGTH_SHORT).show()
+        //finally delete the team itself from the database
         db.delete(TEAM_TABLE_NAME, COL_TEAM_NAME+"=?", arrayOf(n.toString()))
+        db.close()
+    }
+    //deletes individual players from the database
+    fun deletePlayerEntry(id: String){
+        val db = this.writableDatabase
+        var sA = ArrayList<String>()
+        sA.add(id)
+
+        db.delete(PLAYER_TABLE_NAME, COL_PLAYER_ID+"=?", arrayOf(id.toString()))
         db.close()
     }
 }
