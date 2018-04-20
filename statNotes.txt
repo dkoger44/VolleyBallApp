@@ -11,4 +11,4 @@ For Team Only
 
 Keep track of point reason. 
 (For ex. Display rally number, rotation number, Which team recieved the point
-Action *what happened to win or lose point*, Assist, Score * Running tally*
+Action *what happened to win or lose point*, Assist, Score * Running tally*)
