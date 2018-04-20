@@ -45,6 +45,7 @@ class viewTeamActivity : AppCompatActivity() {
             //teamDB.deleteTeamEntry("default team")
             if(deleteTeamName != "") {
                 val teamDB = DBHandler(this)
+                teamDB.deletePlayersOnTeam(deleteTeamName)
                 teamDB.deleteTeamEntry(deleteTeamName)
                 onResume()
             }

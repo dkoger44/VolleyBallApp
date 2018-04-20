@@ -2,11 +2,8 @@ package com.example.android.volleyballapp
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.content.Intent
-import android.widget.AdapterView
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 
 class ViewTeamRosterActivity : AppCompatActivity() {
     var deletePlayerId = ""
@@ -55,7 +52,8 @@ class ViewTeamRosterActivity : AppCompatActivity() {
         val newPlayerBtn = findViewById<Button>(R.id.newPlayerButton) as Button
         val previousIntent = getIntent()
         val teamName = previousIntent.getSerializableExtra("TeamObject") as Team
-
+        val rosterTitle = findViewById<TextView>(R.id.teamNameForRoster) as TextView
+        rosterTitle.setText(teamName.getName())
 
         newPlayerBtn.setOnClickListener({
 
