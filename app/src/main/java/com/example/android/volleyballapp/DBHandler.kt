@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
 import android.provider.SyncStateContract.Helpers.update
-
+import com.example.android.volleyballapp.R.id.playerID
 
 
 val DATABASE_NAME = "VolleyBall"
@@ -14,6 +14,7 @@ val TEAM_TABLE_NAME = "teams"
 val PLAYER_TABLE_NAME = "player"
 val GAME_TABLE_NAME = "game"
 val SCHEDULE_TABLE_NAME = "schedule"
+val PLAYER_GAME_TABLE_NAME = "playerGame"
 val COL_TEAM_NAME = "name"
 val COL_TEAM_TYPE = "type"
 val COL_TEAM_SEASON = "season"
@@ -31,6 +32,23 @@ val COL_GAME_OPPONENT = "opponent"
 val COL_GAME_SCHEDULEID = "scheduleID"
 val COL_SCHEDULE_ID = "id"
 val COL_SCHEDULE_TEAMNAME = "teamName"
+val COL_PG_PLAYER = "playerID"
+val COL_PG_GAME = "gID"
+val COL_PG_KILLS = "kiils"
+val COL_PG_ERRORS = "errors"
+val COL_PG_TOTAL_ATTACKS = "totalAttacks"
+//nmay compute hitting percentage rather than store it
+val COL_PG_HITTING_PERCENTAGE = "hittingPercentage"
+val COL_PG_ASSISTS = "assists"
+val COL_PG_BALL_ERRORS = "ballHandlingErrors"
+val COL_PG_SERVICE_ACES = "serviceAces"
+val COL_PG_SERVE_ATTEMPTS = "serveAttempts"
+val COL_PG_RECEPTION_ERRORS = "receptionErrors"
+val COL_PG_RECEPTION_ATTEMPTS = "receptionAttempts"
+val COL_PG_DIGS = "digs"
+val COL_PG_BLOCK_SOLO = "blockSolos"
+val COL_PG_BLOCK_ASSISTS = "blockAssists"
+val COL_PG_BLOCK_ERRORS = "blockingErrors"
 
 class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,null,1){
     override fun onCreate(db: SQLiteDatabase?){
@@ -69,6 +87,7 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val createGameTable = "CREATE TABLE "+ GAME_TABLE_NAME + " (" +
                 COL_GAME_GAMEID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COL_GAME_DATE + " TEXT," +
+                //TODO MAY CHANGE LOCATION TO HOMETEAM BOOLEAN
                 COL_GAME_LOCATION + " VARCHAR(50)," +
                 COL_GAME_OPPONENT + " VARCHAR(50)," +
                 COL_GAME_SCHEDULEID + " INTEGER, " +
@@ -85,6 +104,29 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         db?.execSQL(createScheduleTable)
 
+        val createPlayerGameTable = "CREATE TABLE " + PLAYER_GAME_TABLE_NAME + " (" +
+                COL_PG_PLAYER + " INTEGER," +
+                COL_PG_GAME + " INTEGER," +
+                COL_PG_KILLS + " INTEGER," +
+                COL_PG_ERRORS + " INTEGER," +
+                COL_PG_TOTAL_ATTACKS + " INTEGER," +
+                COL_PG_ASSISTS + " INTEGER," +
+                COL_PG_BALL_ERRORS + " INTEGER," +
+                COL_PG_SERVICE_ACES + " INTEGER," +
+                COL_PG_SERVE_ATTEMPTS + " INTEGER," +
+                COL_PG_RECEPTION_ERRORS + " INTEGER," +
+                COL_PG_RECEPTION_ATTEMPTS + " INTEGER," +
+                COL_PG_DIGS + " INTEGER," +
+                COL_PG_BLOCK_SOLO + " INTEGER," +
+                COL_PG_BLOCK_ASSISTS + " INTEGER," +
+                COL_PG_BLOCK_ERRORS + " INTEGER, " +
+                "FOREIGN KEY(" + COL_PG_PLAYER + ") REFERENCES " +
+                PLAYER_TABLE_NAME + "(" + COL_PLAYER_ID +") ON DELETE CASCADE, " +
+                "FOREIGN KEY(" + COL_PG_GAME + ") REFERENCES " +
+                GAME_TABLE_NAME + "(" + COL_GAME_GAMEID + ") ON DELETE CASCADE)"
+
+        db?.execSQL(createPlayerGameTable)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -94,10 +136,12 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val dropPlayerTable = "DROP TABLE " + PLAYER_TABLE_NAME
         val dropGameTable = "DROP TABLE " + GAME_TABLE_NAME
         val dropScheduleTable = "DROP TABLE " + SCHEDULE_TABLE_NAME
+        val dropPlayerGameTable = "DROP TABLE " + PLAYER_GAME_TABLE_NAME
         db?.execSQL(dropTEAMTable)
         db?.execSQL(dropPlayerTable)
         db?.execSQL(dropGameTable)
         db?.execSQL(dropScheduleTable)
+        db?.execSQL(dropPlayerGameTable)
 
         val createTeamTable = "CREATE TABLE "+ TEAM_TABLE_NAME + " (" +
                 COL_TEAM_NAME +" VARCHAR(50) PRIMARY KEY," +
@@ -139,6 +183,29 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 TEAM_TABLE_NAME + "(" + COL_TEAM_NAME + "))"
 
         db?.execSQL(createScheduleTable)
+
+        val createPlayerGameTable = "CREATE TABLE " + PLAYER_GAME_TABLE_NAME + " (" +
+                COL_PG_PLAYER + " INTEGER," +
+                COL_PG_GAME + " INTEGER," +
+                COL_PG_KILLS + " INTEGER," +
+                COL_PG_ERRORS + " INTEGER," +
+                COL_PG_TOTAL_ATTACKS + " INTEGER," +
+                COL_PG_ASSISTS + " INTEGER," +
+                COL_PG_BALL_ERRORS + " INTEGER," +
+                COL_PG_SERVICE_ACES + " INTEGER," +
+                COL_PG_SERVE_ATTEMPTS + " INTEGER," +
+                COL_PG_RECEPTION_ERRORS + " INTEGER," +
+                COL_PG_RECEPTION_ATTEMPTS + " INTEGER," +
+                COL_PG_DIGS + " INTEGER," +
+                COL_PG_BLOCK_SOLO + " INTEGER," +
+                COL_PG_BLOCK_ASSISTS + " INTEGER," +
+                COL_PG_BLOCK_ERRORS + " INTEGER, " +
+                "FOREIGN KEY(" + COL_PG_PLAYER + ") REFERENCES " +
+                PLAYER_TABLE_NAME + "(" + COL_PLAYER_ID +") ON DELETE CASCADE, " +
+                "FOREIGN KEY(" + COL_PG_GAME + ") REFERENCES " +
+                GAME_TABLE_NAME + "(" + COL_GAME_GAMEID + ") ON DELETE CASCADE)"
+
+        db?.execSQL(createPlayerGameTable)
     }
     //inserting value into Team table
     fun insertTeamData(team: Team){
@@ -310,7 +377,7 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.delete(PLAYER_TABLE_NAME, COL_PLAYER_ID+"=?", arrayOf(id.toString()))
         db.close()
     }
-    //delets every player that is on a specific team
+    //deletes every player that is on a specific team
     fun deletePlayersOnTeam(teamName: String){
         val db = this.writableDatabase
         var sA = ArrayList<String>()
