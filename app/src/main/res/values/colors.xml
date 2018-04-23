@@ -4,4 +4,6 @@
     <color name="colorPrimary">#2B2D30</color>
     <color name="colorPrimaryDark">#191A1D</color>
     <color name="colorAccent">#2B2D30</color>
+    <color name="blueScoreSheets">#0a68ff</color>
+    <color name="redScoreSheets">#ff0909</color>
 </resources>

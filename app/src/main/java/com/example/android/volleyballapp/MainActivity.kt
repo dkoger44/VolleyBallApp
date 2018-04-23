@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         val rost_btn = findViewById<Button>(R.id.rosterButton) as Button
         val help_btn = findViewById<Button>(R.id.helpButton) as Button
         val newGame_btn = findViewById<Button>(R.id.newGameButton) as Button
-
+        val setTest = findViewById<Button>(R.id.settingsButton) as Button
 
         //setting button onClick Listeners
         rost_btn.setOnClickListener({
@@ -32,6 +32,11 @@ class MainActivity : AppCompatActivity() {
 
         newGame_btn.setOnClickListener({
             val intent = Intent(this,selectTeamActivity::class.java)
+            startActivity(intent)
+        })
+
+        setTest.setOnClickListener({
+            val intent = Intent(this,MainGameScreenActivity::class.java)
             startActivity(intent)
         })
     }
