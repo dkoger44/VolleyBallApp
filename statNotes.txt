@@ -1,7 +1,7 @@
 * Attack (kills, errors, total attacks, hitting percentage)
 * Setting (assists, ball handling errors)
 * Serving (service aces, serve attempts, serving percentage)
-* Passing (reception errors, reception attempts)
+* Passing (reception errors, reception attempts, passing percentage)
 * Defense (digs)
 * Blocking (block solos, block assists, blocking errors)
 
@@ -12,3 +12,11 @@ For Team Only
 Keep track of point reason. 
 (For ex. Display rally number, rotation number, Which team recieved the point
 Action *what happened to win or lose point*, Assist, Score * Running tally*)
+
+Buttons
+Serving (Ace, Miss, Rec Err)
+Attack (Kill, err, Hit in play *HNP*)
+Setting (assists, ball handling error *bal err*)
+Passing (Rec Err, 1 , 2 , 3, Dig)
+Blocking (block, block assist *blk asst*, block err)
+
