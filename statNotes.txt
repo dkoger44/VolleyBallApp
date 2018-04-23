@@ -19,4 +19,7 @@ Attack (Kill, err, Hit in play *HNP*)
 Setting (assists, ball handling error *bal err*)
 Passing (Rec Err, 1 , 2 , 3, Dig)
 Blocking (block, block assist *blk asst*, block err)
+**NOTE ABOUT BUTTONS**
+Only players in the front row need blocking buttons
+Only the player in the serving position needs Serving Buttons
 
