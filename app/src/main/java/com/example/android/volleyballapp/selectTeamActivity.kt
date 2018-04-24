@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.*
 
 class selectTeamActivity : AppCompatActivity() {
-
+var teamName = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_team)
@@ -15,7 +15,7 @@ class selectTeamActivity : AppCompatActivity() {
         //attaching buttons
         val homeBtn = findViewById<Button>(R.id.selectTeamHomeButton) as Button
         val helpBtn = findViewById<Button>(R.id.selectTeamHelpButton) as Button
-
+        val startBtn = findViewById<Button>(R.id.startGameButton) as Button
 
         //setting Button onClick listeners
         homeBtn.setOnClickListener({
@@ -25,7 +25,19 @@ class selectTeamActivity : AppCompatActivity() {
             val intent = Intent(this, HelpActivity::class.java )
             startActivity(intent)
         })
-
+        startBtn.setOnClickListener({
+            val selectedTeam = Team(teamName)
+            val teamDB = DBHandler(this)
+            val teamsPlayers = teamDB.readPlayerData(selectedTeam)
+            if(teamsPlayers.size>5) {
+                val intent = Intent(this, SelectLineUpActivity::class.java)
+                intent.putExtra("TeamObject", teamName)
+                startActivity(intent)
+            }
+            else{
+                Toast.makeText(this,"Please Select a Team with At Least 6 players!",Toast.LENGTH_LONG).show()
+            }
+        })
 
     }
 
@@ -62,7 +74,7 @@ class selectTeamActivity : AppCompatActivity() {
         lView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val item = parent.getItemAtPosition(position) as String
             //val teamTextView = findViewById<TextView>(R.id.teamNameSelectTeam)
-
+            teamName = item
 
 
             Toast.makeText(this, "HEY list item clicked and the name is " + item, Toast.LENGTH_SHORT).show()
