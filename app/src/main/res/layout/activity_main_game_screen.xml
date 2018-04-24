@@ -63,6 +63,13 @@
                         android:text="Number"
                         android:layout_below="@id/libName"
                         android:layout_centerHorizontal="true"/>
+                    <!--player ID -->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:id="@+id/libPlayerID"
+                        android:visibility="invisible"
+                        android:textSize="0dp"/>
                     <!--swap button-->
                     <Button
                         android:layout_width="wrap_content"
@@ -406,6 +413,13 @@
                         android:id="@+id/pos4PlayerName"
                         android:text="Player Name"
                         android:textSize="14sp"/>
+                    <!--player ID -->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:id="@+id/pos4PlayerID"
+                        android:visibility="invisible"
+                        android:textSize="0dp"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -704,6 +718,13 @@
                         android:id="@+id/pos3PlayerName"
                         android:text="Player Name"
                         android:textSize="14sp"/>
+                    <!--player ID -->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:id="@+id/pos3PlayerID"
+                        android:visibility="invisible"
+                        android:textSize="0dp"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -1002,6 +1023,13 @@
                     android:id="@+id/pos2PlayerName"
                     android:text="Player Name"
                     android:textSize="14sp"/>
+                <!--player ID -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:id="@+id/pos2PlayerID"
+                    android:visibility="invisible"
+                    android:textSize="0dp"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1299,6 +1327,13 @@
                         android:id="@+id/pos5PlayerName"
                         android:text="Player Name"
                         android:textSize="14sp"/>
+                    <!--player ID -->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:id="@+id/pos5PlayerID"
+                        android:visibility="invisible"
+                        android:textSize="0dp"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -1552,6 +1587,13 @@
                         android:id="@+id/pos6PlayerName"
                         android:text="Player Name"
                         android:textSize="14sp"/>
+                    <!--player ID -->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:id="@+id/pos4PlayerID"
+                        android:visibility="invisible"
+                        android:textSize="0dp"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -1807,6 +1849,13 @@
                         android:id="@+id/pos1PlayerName"
                         android:text="Player Name"
                         android:textSize="14sp"/>
+                    <!--player ID -->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:id="@+id/pos1PlayerID"
+                        android:visibility="invisible"
+                        android:textSize="0dp"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

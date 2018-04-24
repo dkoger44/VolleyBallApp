@@ -1,10 +1,14 @@
 package com.example.android.volleyballapp;
 
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /*
 Player object will hold Player name, number, and related methods
  */
-public class Player {
+public class Player implements Serializable{
     private int ID;
     private String firstName;
     private String lastName;
@@ -29,6 +33,10 @@ public class Player {
         gradeLevel = gL;
 
         //will need to also assign picture information in constructor as well
+    }
+    //null setter for Libero object
+    Player(){
+
     }
 
     //setters
