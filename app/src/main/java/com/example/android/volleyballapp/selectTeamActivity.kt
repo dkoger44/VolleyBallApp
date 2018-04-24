@@ -26,9 +26,17 @@ var teamName = ""
             startActivity(intent)
         })
         startBtn.setOnClickListener({
-            val intent = Intent(this,SelectLineUpActivity::class.java)
-            intent.putExtra("TeamObject",teamName)
-            startActivity(intent)
+            val selectedTeam = Team(teamName)
+            val teamDB = DBHandler(this)
+            val teamsPlayers = teamDB.readPlayerData(selectedTeam)
+            if(teamsPlayers.size>5) {
+                val intent = Intent(this, SelectLineUpActivity::class.java)
+                intent.putExtra("TeamObject", teamName)
+                startActivity(intent)
+            }
+            else{
+                Toast.makeText(this,"Please Select a Team with At Least 6 players!",Toast.LENGTH_LONG).show()
+            }
         })
 
     }

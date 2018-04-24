@@ -1,10 +1,12 @@
 package com.example.android.volleyballapp
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_add_team.*
 
@@ -17,9 +19,7 @@ class SelectLineUpActivity : AppCompatActivity() {
         //boolean to check if the game has been started. If it has you want to skip this screen
         //when coming back through the backStack
         gameStartedCheck = false
-
     }
-
     override fun onResume() {
         super.onResume()
         //will check to see if the game has already been started and if so then the lineup page will
@@ -27,9 +27,6 @@ class SelectLineUpActivity : AppCompatActivity() {
        // if(gameStartedCheck){
         //    finish()
         //}
-
-
-
         //declating database handler
         val playerDB = DBHandler(this)
 
@@ -182,6 +179,12 @@ class SelectLineUpActivity : AppCompatActivity() {
             else{
                 Toast.makeText(this,"Please enter different players for positions",Toast.LENGTH_LONG).show()
             }
+        })
+        val background = findViewById<LinearLayout>(R.id.background) as LinearLayout
+        background.setOnClickListener({
+            val inputManager: InputMethodManager =getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(currentFocus.windowToken, InputMethodManager.SHOW_FORCED)
+
         })
     }
 }
