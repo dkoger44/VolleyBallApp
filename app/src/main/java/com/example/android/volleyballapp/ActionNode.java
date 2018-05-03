@@ -60,6 +60,9 @@ public class ActionNode {
         return otherTeamScore;
     }
     public int getMyTeamGames(){
+        return myTeamGames;
+    }
+    public int getOtherTeamGames(){
         return otherTeamGames;
     }
     public boolean getServeIndicator(){
