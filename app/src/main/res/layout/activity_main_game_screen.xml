@@ -340,10 +340,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Subs Remaining"
+                    android:text="Subs Used"
                     android:textColor="@android:color/white"
                     android:textSize="24dp"/>
             </LinearLayout>
+            <!--opposing team error button-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/opTeamErrorButton"
+                android:text="Opp. Team Err."
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"/>
             <!--undo button -->
             <Button
                 android:id="@+id/gameUndoButton"
@@ -1591,7 +1599,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:id="@+id/pos4PlayerID"
+                        android:id="@+id/pos6PlayerID"
                         android:visibility="invisible"
                         android:textSize="0dp"/>
                     <LinearLayout

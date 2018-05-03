@@ -13,7 +13,15 @@ class MainGameScreenActivity : AppCompatActivity() {
     var playersOnBenchList : MutableList<Player> = ArrayList()
     var libPlayer = Player()
     var libCheck = false
+    //limits the forloop for adding player names depending on if there is a libero in the game or not.
     var textViewArrayLimit = 5
+    var myTeamScore = 0
+    var otherTeamScore = 0
+    //true is my team false is other team
+    var serveIndicator = true
+    var myTeamGames = 0
+    var otherTeamGames = 0
+    var mySubsUsed = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_game_screen)
@@ -28,8 +36,9 @@ class MainGameScreenActivity : AppCompatActivity() {
         val player6 = previousIntent.getSerializableExtra("player6") as Player
         libCheck = previousIntent.getBooleanExtra("Libero Check",false)
 
-        val playingTeam = previousIntent.getSerializableExtra("Team Object")
+        val playingTeam = previousIntent.getSerializableExtra("Team Object") as Team
         val opponentName = previousIntent.getStringExtra("Opponent Name")
+        var serveIndicator = previousIntent.getBooleanExtra("startingServe",true)
 
         //put starting players in list and on the court
         startingPlayersList.add(player1)
@@ -48,8 +57,31 @@ class MainGameScreenActivity : AppCompatActivity() {
             playersOnCourtList.add(startingPlayersList[i])
         }
 
-        //TODO: query for players not on the court and put them on the bench
-
+        //adding players to the bench
+        //creating db handler to access database
+        val DB = DBHandler(this)
+        //grabbing the entire team roster
+        val playersOnTeamList = DB.readPlayerData(playingTeam)
+        //for each player on the roster we should check to see if they are a starting player
+        for(i in 0..playersOnTeamList.size-1){
+            var addToBenchCheck = false
+            //moving through the starting player list
+            for(j in 0..startingPlayersList.size-1){
+                //if the player is on the staring list then we should stop looking and not add them to the bench
+                if(playersOnTeamList.get(i).getID()==startingPlayersList.get(j).getID()){
+                    addToBenchCheck=false
+                    break;
+                }
+                //if they are not found then we should add them to the bench
+                else{
+                    addToBenchCheck=true
+                }
+            }
+            //if the player was never found on the starting player list then we will add them to the bench.
+            if(addToBenchCheck) {
+                playersOnBenchList.add(playersOnTeamList.get(i))
+            }
+        }
     }
 
     override fun onResume() {

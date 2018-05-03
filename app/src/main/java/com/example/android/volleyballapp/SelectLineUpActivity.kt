@@ -158,6 +158,17 @@ class SelectLineUpActivity : AppCompatActivity() {
             }
         }
 
+        //serveCheckBox
+        val startServe = findViewById<CheckBox>(R.id.startingServeCheck) as CheckBox
+        var serveChecked = false
+        startServe.setOnClickListener({
+            serveChecked = startServe.isChecked
+        })
+
+
+
+
+
         doneBtn.setOnClickListener({
             //check to see if the lineup has been filled out
             var lineUpCheck = true
@@ -205,6 +216,8 @@ class SelectLineUpActivity : AppCompatActivity() {
                 //pass Libero boolean flag
                 intent.putExtra("Libero Check",liberoCheck)
 
+                //pass the serveIndicator
+                intent.putExtra("startingServe",serveChecked)
                 //start activity
                 startActivity(intent)
 
