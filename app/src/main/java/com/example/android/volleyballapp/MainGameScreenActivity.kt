@@ -4,14 +4,21 @@ import android.app.PendingIntent.getActivity
 import android.content.pm.ActivityInfo
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import org.w3c.dom.Text
 
 class MainGameScreenActivity : AppCompatActivity() {
     var startingPlayersList : MutableList<Player> = ArrayList()
     var playersOnCourtList : MutableList<Player> = ArrayList()
+    var intialOnCourtList : MutableList<Player> = ArrayList()
     var playersOnBenchList : MutableList<Player> = ArrayList()
+    var intialOnBenchList : MutableList<Player> = ArrayList()
     var libPlayer = Player()
+    var intialLibPlayer = Player()
     var libCheck = false
     //limits the forloop for adding player names depending on if there is a libero in the game or not.
     var textViewArrayLimit = 5
@@ -19,9 +26,11 @@ class MainGameScreenActivity : AppCompatActivity() {
     var otherTeamScore = 0
     //true is my team false is other team
     var serveIndicator = true
+    var intialServeIndicator = true
     var myTeamGames = 0
     var otherTeamGames = 0
     var mySubsUsed = 0
+    val actions = ActionStack();
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_game_screen)
@@ -38,7 +47,7 @@ class MainGameScreenActivity : AppCompatActivity() {
 
         val playingTeam = previousIntent.getSerializableExtra("Team Object") as Team
         val opponentName = previousIntent.getStringExtra("Opponent Name")
-        var serveIndicator = previousIntent.getBooleanExtra("startingServe",true)
+        serveIndicator = previousIntent.getBooleanExtra("startingServe",true)
 
         //put starting players in list and on the court
         startingPlayersList.add(player1)
@@ -82,10 +91,40 @@ class MainGameScreenActivity : AppCompatActivity() {
                 playersOnBenchList.add(playersOnTeamList.get(i))
             }
         }
+        intialOnCourtList = playersOnCourtList
+        intialOnBenchList = playersOnBenchList
+        intialLibPlayer = libPlayer
+        intialServeIndicator = serveIndicator
+
     }
 
     override fun onResume() {
         super.onResume()
+        //setServeArrowImageViews
+        val myTeamServeArrow = findViewById<ImageView>(R.id.serveArrowLeft) as ImageView
+        val otherTeamServeArrow = findViewById<ImageView>(R.id.serveArrowRight) as ImageView
+        if(serveIndicator){
+            otherTeamServeArrow.visibility = View.INVISIBLE
+            myTeamServeArrow.visibility = View.VISIBLE
+        }
+        else{
+            otherTeamServeArrow.visibility = View.VISIBLE
+            myTeamServeArrow.visibility = View.INVISIBLE
+        }
+        //setScoreBoardTextViews
+        val myTeamScoreViewTens = findViewById<TextView>(R.id.leftTeamScoreTensDigit) as TextView
+        val myTeamSCoreViewOnes = findViewById<TextView>(R.id.leftTeamScoreOnesDigit) as TextView
+        val otherTeamScoreViewTens = findViewById<TextView>(R.id.rightTeamScoreTensDigit) as TextView
+        val otherTeamScoreViewOnes = findViewById<TextView>(R.id.rightTeamScoreOnesDigit) as TextView
+        myTeamScoreViewTens.setText(""+myTeamScore/10)
+        myTeamSCoreViewOnes.setText(""+myTeamScore%10)
+        otherTeamScoreViewTens.setText(""+otherTeamScore/10)
+        otherTeamScoreViewOnes.setText(""+otherTeamScore%10)
+        //setGameBoardTextViews
+        val myTeamGameView = findViewById<TextView>(R.id.leftTeamGamesWon) as TextView
+        val otherTeamGameView = findViewById<TextView>(R.id.rightTeamGamesWon) as TextView
+        myTeamGameView.setText(""+myTeamGames)
+        otherTeamGameView.setText(""+otherTeamGames)
 
         var nameTextViews : MutableList<TextView> = ArrayList()
         var numberTextViews : MutableList<TextView> = ArrayList()
@@ -133,5 +172,55 @@ class MainGameScreenActivity : AppCompatActivity() {
                 numberTextViews[i].setText(libPlayer.getNumber().toString())
             }
         }
+        val undoButton = findViewById<Button>(R.id.gameUndoButton) as Button
+        undoButton.setOnClickListener({
+            val nullCheck = actions.peek()
+            if(nullCheck!=null) {
+                actions.pop()
+                val gameState = actions.peek()
+                if (gameState != null) {
+                    playersOnCourtList = gameState.getPlayersOnCourtList()
+                    playersOnBenchList = gameState.getPlayersOnBenchList()
+                    libPlayer = gameState.getLibPlayer()
+                    myTeamScore = gameState.getMyTeamScore()
+                    otherTeamScore = gameState.getOtherTeamScore()
+                    myTeamGames = gameState.getMyTeamGames()
+                    otherTeamGames = gameState.getOtherTeamGames()
+                    serveIndicator = gameState.getServeIndicator()
+                    mySubsUsed = gameState.getMySubsUsed()
+                } else {
+                    playersOnCourtList = intialOnCourtList
+                    playersOnBenchList = intialOnBenchList
+                    libPlayer = intialLibPlayer
+                    myTeamScore = 0
+                    otherTeamScore = 0
+                    myTeamGames = 0
+                    otherTeamGames = 0
+                    serveIndicator = intialServeIndicator
+                    mySubsUsed = 0
+                }
+                onResume()
+            }
+        })
+        //initializing buttons
+        val player1AceBtn = findViewById<Button>(R.id.pos1AceButton) as Button
+        player1AceBtn.setOnClickListener({
+            if(serveIndicator) {
+                myTeamScore=myTeamScore+1
+                if(myTeamScore==25&&myTeamScore>otherTeamScore+2){
+                    myTeamGames=myTeamGames+1
+                    myTeamScore=0
+                    otherTeamScore=0
+                }
+                val thisAction = ActionNode(playersOnCourtList, playersOnBenchList, libPlayer, myTeamScore,
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, "ace", playersOnCourtList.get(1), null)
+                actions.push(thisAction)
+                onResume()
+            }
+            else{
+                Toast.makeText(this,"Your team doesn't have the serve",Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 }

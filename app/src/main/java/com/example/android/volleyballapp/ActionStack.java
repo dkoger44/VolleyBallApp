@@ -9,6 +9,7 @@ public class ActionStack {
 
     }
     public void push(ActionNode a){
+        a.setBelow(top);
         top = a;
     }
     public ActionNode pop(){
