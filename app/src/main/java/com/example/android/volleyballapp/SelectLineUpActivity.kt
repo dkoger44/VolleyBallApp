@@ -91,6 +91,7 @@ class SelectLineUpActivity : AppCompatActivity() {
 
         //val lineUp = arrayOfNulls<String>(7)
         val lineUp = arrayOf(0,0,0,0,0,0,0)
+        var libSpinPosChec = 0
         p1Spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 lineUp[0] = position
@@ -151,6 +152,7 @@ class SelectLineUpActivity : AppCompatActivity() {
         libSpin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 lineUp[6] = position
+                libSpinPosChec = position
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -164,10 +166,6 @@ class SelectLineUpActivity : AppCompatActivity() {
         startServe.setOnClickListener({
             serveChecked = startServe.isChecked
         })
-
-
-
-
 
         doneBtn.setOnClickListener({
             //check to see if the lineup has been filled out
@@ -187,8 +185,16 @@ class SelectLineUpActivity : AppCompatActivity() {
             if(lineUpCheck) {
                 //NOTE: lineUp[i]-1 is the position of the player in the original player array
                 var startingPlayersList : MutableList<Player> = ArrayList()
-                for (i in 0..lineUp.size-1){
-                    startingPlayersList.add(playersOnTeam.get(lineUp[i]-1))
+                if(libSpinPosChec!=0) {
+                    for (i in 0..lineUp.size - 1) {
+                        startingPlayersList.add(playersOnTeam.get(lineUp[i] - 1))
+                    }
+                }
+                //this loop is needed if the libero position was selected so as to prevent an array out of bounds
+                else{
+                    for (i in 0..lineUp.size - 2) {
+                        startingPlayersList.add(playersOnTeam.get(lineUp[i] - 1))
+                    }
                 }
                 var liberoCheck = false
                 //create intent

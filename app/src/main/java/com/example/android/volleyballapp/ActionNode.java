@@ -19,12 +19,15 @@ public class ActionNode {
     private int otherTeamGames;
     private boolean serveIndicator;
     private int mySubsUsed;
+    private int rotation;
+    private int myTO;
+    private int otherTeamTO;
     private String action;
     private Player activePlayer;
     private Player subbedForPlayer;
     private ActionNode below;
     ActionNode(List<Player> poc,List<Player> pob, Player l, int mts, int ots, int mtg, int otg,
-               boolean s, int msu, String a, Player ap, Player sfp){
+               boolean s, int msu, int r, int mto, int oto, String a, Player ap, Player sfp){
         playersOnCourtList = poc;
         playersOnBenchList = pob;
         libPlayer = l;
@@ -34,6 +37,9 @@ public class ActionNode {
         otherTeamGames = otg;
         serveIndicator = s;
         mySubsUsed = msu;
+        rotation = r;
+        myTO = mto;
+        otherTeamTO = oto;
         action = a;
         activePlayer = ap;
         subbedForPlayer = sfp;
@@ -71,6 +77,11 @@ public class ActionNode {
     public int getMySubsUsed(){
         return mySubsUsed;
     }
+    public int getRotation(){
+        return rotation;
+    }
+    public int getMyTO(){return myTO;}
+    public int getOtherTeamTO(){return otherTeamTO;}
     public String getAction(){
         return action;
     }

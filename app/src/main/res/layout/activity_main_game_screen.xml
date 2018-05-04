@@ -11,29 +11,28 @@
 
     <!--Top bar-->
     <LinearLayout
-        android:layout_weight="2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="2"
         android:background="@android:color/holo_orange_dark"
-        android:weightSum="3"
-        >
+        android:weightSum="3">
         <!--left segment with Libero information -->
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
             <!--Libero CardView-->
-            <android.support.v7.widget.CardView
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="14dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginRight="34dp"
                 android:layout_marginLeft="14dp"
-                card_view:cardElevation="4dp"
-                card_view:cardCornerRadius="8dp">
+                android:layout_marginRight="34dp"
+                android:layout_marginTop="14dp"
+                card_view:cardCornerRadius="8dp"
+                card_view:cardElevation="4dp">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -44,41 +43,41 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        android:textAlignment="center"
                         android:text="Libero"
+                        android:textAlignment="center"
                         android:textSize="18sp" />
                     <!--name-->
                     <TextView
+                        android:id="@+id/libName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/libName"
-                        android:text="Name"
                         android:layout_below="@id/libTitleText"
-                        android:layout_centerHorizontal="true"/>
+                        android:layout_centerHorizontal="true"
+                        android:text="Name" />
                     <!--number-->
                     <TextView
+                        android:id="@+id/libNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/libNumber"
-                        android:text="Number"
                         android:layout_below="@id/libName"
-                        android:layout_centerHorizontal="true"/>
+                        android:layout_centerHorizontal="true"
+                        android:text="Number" />
                     <!--player ID -->
                     <TextView
+                        android:id="@+id/libPlayerID"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:id="@+id/libPlayerID"
-                        android:visibility="invisible"
-                        android:textSize="0dp"/>
+                        android:textSize="0dp"
+                        android:visibility="invisible" />
                     <!--swap button-->
                     <Button
+                        android:id="@+id/libBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/libBtn"
-                        android:text="SWAP"
-                        android:layout_below="@id/libName"
                         android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true" />
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/libName"
+                        android:text="SWAP" />
                     <!--picture-->
                     <ImageView
                         android:id="@+id/libPic"
@@ -96,70 +95,96 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/holo_green_light">
+            <!--left team Timeout-->
+            <Button
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/leftTeamTOButton"
+                android:text="Use TO"
+                android:textSize="12dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+            <!--right team Timeout-->
+            <Button
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rightTeamTOButton"
+                android:text="Use TO"
+                android:textSize="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
             <!--team titles-->
             <LinearLayout
                 android:id="@+id/teamTitles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
+                android:layout_marginBottom="4dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp">
+                android:orientation="horizontal"
+                android:weightSum="2">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="My Team"
-                    android:textColor="@android:color/white"
-                    android:layout_weight="1"
                     android:textAlignment="center"
-                    android:textSize="14dp"/>
+                    android:textColor="@android:color/white"
+                    android:textSize="14dp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Opponent"
-                    android:textColor="@android:color/white"
                     android:layout_weight="1"
+                    android:text="Opponent"
                     android:textAlignment="center"
-                    android:textSize="14dp"/>
+                    android:textColor="@android:color/white"
+                    android:textSize="14dp" />
             </LinearLayout>
             <!--second row below titles-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/teamTitles"
                 android:layout_centerHorizontal="true"
-                android:weightSum="3"
-                android:layout_below="@+id/teamTitles">
+                android:weightSum="3">
                 <!-- left team score-->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/blueScoreSheets"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:background="@color/blueScoreSheets">
+
                     <TextView
                         android:id="@+id/leftTeamScoreTensDigit"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="0"
-                        android:textColor="@android:color/white"
                         android:layout_margin="4dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:text="0"
+                        android:textColor="@android:color/white" />
+
                     <TextView
                         android:id="@+id/leftTeamScoreOnesDigit"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="0"
-                        android:textColor="@android:color/white"
                         android:layout_margin="4dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:text="0"
+                        android:textColor="@android:color/white" />
                 </LinearLayout>
                 <!--center sector where arrows and time outs are -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_margin="6dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
                     <!-- serve arrows -->
                     <LinearLayout
@@ -173,14 +198,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@mipmap/ic_arrow_back_white_24dp" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Serve"
-                            android:textSize="14dp"
                             android:layout_marginLeft="4dp"
                             android:layout_marginRight="4dp"
-                            android:textColor="@android:color/white"/>
+                            android:text="Serve"
+                            android:textColor="@android:color/white"
+                            android:textSize="14dp" />
 
                         <ImageView
                             android:id="@+id/serveArrowRight"
@@ -193,98 +219,123 @@
                         android:id="@+id/gamesWonIndicator"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="12dp">
+                        android:layout_marginLeft="12dp"
+                        android:orientation="horizontal">
+
                         <TextView
                             android:id="@+id/leftTeamGamesWon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@android:color/white"
+                            android:background="@color/blueScoreSheets"
                             android:padding="2dp"
-                            android:background="@color/blueScoreSheets"/>
+                            android:text="0"
+                            android:textColor="@android:color/white" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Games"
-                            android:textSize="14dp"
-                            android:layout_marginRight="4dp"
                             android:layout_marginLeft="4dp"
-                            android:textColor="@android:color/white"/>
+                            android:layout_marginRight="4dp"
+                            android:text="Games"
+                            android:textColor="@android:color/white"
+                            android:textSize="14dp" />
+
                         <TextView
                             android:id="@+id/rightTeamGamesWon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:background="@color/redScoreSheets"
                             android:padding="2dp"
-                            android:textColor="@android:color/white"
-                            android:background="@color/redScoreSheets"/>
+                            android:text="0"
+                            android:textColor="@android:color/white" />
                     </LinearLayout>
                     <!--Time outs remaining -->
                     <LinearLayout
                         android:id="@+id/timeOutsIndicator"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="12dp">
+                        android:layout_marginLeft="12dp"
+                        android:orientation="horizontal">
+
                         <TextView
                             android:id="@+id/leftTeamTimeOuts"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@android:color/white"
+                            android:background="@color/blueScoreSheets"
                             android:padding="2dp"
-                            android:background="@color/blueScoreSheets"/>
+                            android:text="0"
+                            android:textColor="@android:color/white" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="TO"
-                            android:textSize="14dp"
-                            android:layout_marginRight="4dp"
                             android:layout_marginLeft="15dp"
-                            android:textColor="@android:color/white"/>
+                            android:layout_marginRight="4dp"
+                            android:text="TO"
+                            android:textColor="@android:color/white"
+                            android:textSize="14dp" />
+
                         <TextView
                             android:id="@+id/rightTeamTimeOuts"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@android:color/white"
+                            android:layout_marginLeft="16dp"
                             android:background="@color/redScoreSheets"
                             android:padding="2dp"
-                            android:layout_marginLeft="16dp"/>
+                            android:text="0"
+                            android:textColor="@android:color/white" />
                     </LinearLayout>
                 </LinearLayout>
                 <!--right team score -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/teamTitles"
                     android:orientation="horizontal"
-                    android:weightSum="3"
-                    android:layout_below="@+id/teamTitles">
+                    android:weightSum="3">
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/redScoreSheets"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:background="@color/redScoreSheets">
+
                         <TextView
                             android:id="@+id/rightTeamScoreTensDigit"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="0"
-                            android:textColor="@android:color/white"
                             android:layout_margin="4dp"
-                            android:layout_weight="1"/>
+                            android:layout_weight="1"
+                            android:text="0"
+                            android:textColor="@android:color/white" />
+
                         <TextView
                             android:id="@+id/rightTeamScoreOnesDigit"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="0"
-                            android:textColor="@android:color/white"
                             android:layout_margin="4dp"
-                            android:layout_weight="1"/>
+                            android:layout_weight="1"
+                            android:text="0"
+                            android:textColor="@android:color/white" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <!--end game button-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/endGameButton"
+                android:text="End Game"/>
+            <!--end match button-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:id="@+id/endMatchButton"
+                android:text="End Match"/>
         </RelativeLayout>
         <!--right segment with rotation and subs remaining as well as menu button -->
         <RelativeLayout
@@ -297,70 +348,78 @@
                 android:id="@+id/rotationLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="8dp">
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
                 <android.support.v7.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <TextView
+                        android:id="@+id/rotationIndicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="24dp"
+                        android:padding="2dp"
+                        android:text="1"
                         android:textAlignment="center"
-                        android:padding="2dp"/>
+                        android:textSize="24dp" />
                 </android.support.v7.widget.CardView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rotation"
                     android:textColor="@android:color/white"
-                    android:textSize="24dp"/>
+                    android:textSize="24dp" />
             </LinearLayout>
             <!--Subs remaining information -->
             <LinearLayout
+                android:id="@+id/subLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/subLayout"
-                android:orientation="horizontal"
-                android:layout_margin="8dp"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true">
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
                 <android.support.v7.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <TextView
+                        android:id="@+id/subsUsedIndicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:padding="2dp"
                         android:text="0"
-                        android:textSize="24dp"
                         android:textAlignment="center"
-                        android:padding="2dp"/>
+                        android:textSize="24dp" />
                 </android.support.v7.widget.CardView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Subs Used"
                     android:textColor="@android:color/white"
-                    android:textSize="24dp"/>
+                    android:textSize="24dp" />
             </LinearLayout>
             <!--opposing team error button-->
             <Button
+                android:id="@+id/opTeamErrorButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/opTeamErrorButton"
-                android:text="Opp. Team Err."
+                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"/>
+                android:text="Opp. Team Err." />
             <!--undo button -->
             <Button
                 android:id="@+id/gameUndoButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="UNDO"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="16dp"/>
+                android:layout_alignParentRight="true"
+                android:layout_margin="16dp"
+                android:text="UNDO" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -581,7 +640,7 @@
                         android:weightSum="2"
                         >
                         <Button
-                            android:id="@+id/pos4AssistErrorButton"
+                            android:id="@+id/pos4AssistButton"
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:layout_weight="1"
@@ -886,7 +945,7 @@
                         android:weightSum="2"
                         >
                         <Button
-                            android:id="@+id/pos3AssistErrorButton"
+                            android:id="@+id/pos3AssistButton"
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:layout_weight="1"
@@ -1191,7 +1250,7 @@
                     android:weightSum="2"
                     >
                     <Button
-                        android:id="@+id/pos2AssistErrorButton"
+                        android:id="@+id/pos2AssistButton"
                         android:minHeight="0dp"
                         android:minWidth="0dp"
                         android:layout_weight="1"
@@ -1450,7 +1509,7 @@
                         android:orientation="vertical"
                         android:weightSum="2">
                         <Button
-                            android:id="@+id/pos5AssistErrorButton"
+                            android:id="@+id/pos5AssistButton"
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:layout_weight="1"
@@ -1710,7 +1769,7 @@
                         android:orientation="vertical"
                         android:weightSum="2">
                         <Button
-                            android:id="@+id/pos6AssistErrorButton"
+                            android:id="@+id/pos6AssistButton"
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:layout_weight="1"
@@ -2021,7 +2080,7 @@
                         android:weightSum="2"
                         >
                         <Button
-                            android:id="@+id/pos1AssistErrorButton"
+                            android:id="@+id/pos1AssistButton"
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:layout_weight="1"
