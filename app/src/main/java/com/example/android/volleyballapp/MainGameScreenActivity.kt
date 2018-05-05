@@ -137,6 +137,10 @@ class MainGameScreenActivity : AppCompatActivity() {
         rotationIndicatorView.setText(""+rotation)
         val subsUsedIndicatorView = findViewById<TextView>(R.id.subsUsedIndicator) as TextView
         subsUsedIndicatorView.setText(""+mySubsUsed)
+        val myTOUsedIndicatorView = findViewById<TextView>(R.id.leftTeamTimeOuts) as TextView
+        myTOUsedIndicatorView.setText(""+myTO)
+        val otherTeamTOUsedIndicatorView = findViewById<TextView>(R.id.rightTeamTimeOuts) as TextView
+        otherTeamTOUsedIndicatorView.setText(""+otherTeamTO)
 
         var nameTextViews : MutableList<TextView> = ArrayList()
         var numberTextViews : MutableList<TextView> = ArrayList()
@@ -184,6 +188,84 @@ class MainGameScreenActivity : AppCompatActivity() {
                 numberTextViews[i].setText(libPlayer.getNumber().toString())
             }
         }
+        //initializing libero button
+        val liberoSwapBtn = findViewById<Button>(R.id.libBtn) as Button
+        liberoSwapBtn.setOnClickListener({
+            if(libPlayer.equals(intialLibPlayer)) {
+                val li = LayoutInflater.from(this)
+                val promptsView = li.inflate(R.layout.sub_player_alert, null)
+                val alertDialogBuilder = AlertDialog.Builder(this)
+                alertDialogBuilder.setView(promptsView)
+                // set dialog message
+                alertDialogBuilder.setTitle("Please Select Player")
+                //alertDialogBuilder.setIcon(R.drawable)
+                // create alert dialog
+                val alertDialog = alertDialogBuilder.create()
+                val mSpinner = promptsView.findViewById<Spinner>(R.id.subSpinner) as Spinner
+                val mButton = promptsView.findViewById<Button>(R.id.subButton) as Button
+                val cancel = promptsView.findViewById<Button>(R.id.subCancelButton) as Button
+                var chosenPlayer = Player()
+                var currentPlayer = libPlayer
+                var positionInt = 0
+                val benchNameList = ArrayList<String>()
+                for (i in 0..playersOnCourtList.size - 1) {
+                    if(i==0||i==4||i==5) {
+                        benchNameList.add(playersOnCourtList.get(i).getFirstName() + " " + playersOnCourtList.get(i).getLastName())
+                    }
+                }
+                val subPlayerAdapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, benchNameList)
+                mSpinner.setAdapter(subPlayerAdapter)
+                mSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                        if(position ==1){
+                            positionInt=4
+                        }
+                        else if(position == 2){
+                            positionInt=5
+                        }
+                        chosenPlayer = playersOnCourtList.get(positionInt)
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+                }
+                cancel.setOnClickListener({
+                    alertDialog.dismiss()
+                })
+                mButton.setOnClickListener({
+                    //playersOnBenchList.remove(chosenPlayer)
+                    //mySubsUsed++
+                    playersOnCourtList.set(positionInt, currentPlayer)
+                    libPlayer = chosenPlayer
+                    alertDialog.dismiss()
+                    val playersOnCourtCopy = ArrayList(playersOnCourtList)
+                    val playersOnBenchCopy = ArrayList(playersOnBenchList)
+                    val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
+                            otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "libSwap", currentPlayer, chosenPlayer)
+                    actions.push(thisAction)
+                    onResume()
+                })
+                alertDialog.show()
+                alertDialog.setCanceledOnTouchOutside(false)
+            }
+            else{
+                var currentPlayer = libPlayer
+                for(i in 0..playersOnCourtList.size-1){
+                    if(playersOnCourtList[i].equals(intialLibPlayer)){
+                        libPlayer = intialLibPlayer
+                        playersOnCourtList.set(i,currentPlayer)
+                        break;
+                    }
+                }
+                val playersOnCourtCopy = ArrayList(playersOnCourtList)
+                val playersOnBenchCopy = ArrayList(playersOnBenchList)
+                val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "reverseLibSwap", currentPlayer, intialLibPlayer)
+                actions.push(thisAction)
+                onResume()
+            }
+        })
         //initializing gameBoard buttons
         val useMyTOBtn = findViewById<Button>(R.id.leftTeamTOButton) as Button
         val otherTeamUseTOBtn = findViewById<Button>(R.id.rightTeamTOButton) as Button
@@ -192,25 +274,36 @@ class MainGameScreenActivity : AppCompatActivity() {
         val oppTeamErrBtn = findViewById<Button>(R.id.opTeamErrorButton) as Button
         val undoButton = findViewById<Button>(R.id.gameUndoButton) as Button
         useMyTOBtn.setOnClickListener({
-            myTO--
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"ourTO", null, null)
-            actions.push(thisAction)
-            onResume()
+            if(myTO>0) {
+                myTO--
+                val playersOnCourtCopy = ArrayList(playersOnCourtList)
+                val playersOnBenchCopy = ArrayList(playersOnBenchList)
+                val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "ourTO", null, null)
+                actions.push(thisAction)
+                onResume()
+            }
+            else{
+                Toast.makeText(this,"You have no TimeOuts Left!",Toast.LENGTH_SHORT).show()
+            }
         })
         otherTeamUseTOBtn.setOnClickListener({
-            otherTeamTO--
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"otherTeamUseTO", null, null)
-            actions.push(thisAction)
-            onResume()
+            if(otherTeamTO>0) {
+                otherTeamTO--
+                val playersOnCourtCopy = ArrayList(playersOnCourtList)
+                val playersOnBenchCopy = ArrayList(playersOnBenchList)
+                val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "otherTeamUseTO", null, null)
+                actions.push(thisAction)
+                onResume()
+            }
+            else{
+                Toast.makeText(this,"The Other Team has no more TimeOuts left!",Toast.LENGTH_LONG).show()
+            }
         })
         /*
         TODO this may need to put the stack into the database and clear it from memory if there becomes
+        TODO may need to add games into database seperately so the user can see the games stats.
         a memory issue
         */
         endGameBtn.setOnClickListener({
@@ -249,8 +342,6 @@ class MainGameScreenActivity : AppCompatActivity() {
             myTeamScore++
             if(!serveIndicator) {
                 serveIndicator = true
-
-                //TODO METHOD CALL FOR ROTATING PLAYERS ON COURT
                 rotatePlayers()
             }
             val playersOnCourtCopy = ArrayList(playersOnCourtList)
@@ -318,21 +409,8 @@ class MainGameScreenActivity : AppCompatActivity() {
         val player1SubBtn = findViewById<Button>(R.id.pos1SubButton) as Button
         player1AceBtn.setOnClickListener({
             if(serveIndicator) {
-                myTeamScore=myTeamScore+1
-                //removing this codesegment because games may end at different scores
-                /*
-                if(myTeamScore==25&&myTeamScore>otherTeamScore+2){
-                    myTeamGames=myTeamGames+1
-                    myTeamScore=0
-                    otherTeamScore=0
-                }
-                */
-                val playersOnCourtCopy = ArrayList(playersOnCourtList)
-                val playersOnBenchCopy = ArrayList(playersOnBenchList)
-                val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"ace", playersOnCourtList.get(0), null)
-                actions.push(thisAction)
-                onResume()
+                myTeamScoreInc()
+                createAction(0,"ace")
             }
             else{
                 Toast.makeText(this,"Your team doesn't have the serve",Toast.LENGTH_SHORT).show()
@@ -340,191 +418,458 @@ class MainGameScreenActivity : AppCompatActivity() {
         })
         player1MissBtn.setOnClickListener({
             if(serveIndicator){
-                otherTeamScore++
-                serveIndicator=false
-                val playersOnCourtCopy = ArrayList(playersOnCourtList)
-                val playersOnBenchCopy = ArrayList(playersOnBenchList)
-                val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"missServe", playersOnCourtList.get(0), null)
-                actions.push(thisAction)
-                onResume()
+                otherTeamScoreInc()
+                createAction(0,"missServe")
             }
             else {
                 Toast.makeText(this, "Your team doesn't have the serve", Toast.LENGTH_SHORT).show()
             }
         })
-        //TODO MAKE SURE THAT SERVE RECIEVE ERROR IS CORRECT
         player1SerRecErrBtn.setOnClickListener({
             if(serveIndicator){
                 myTeamScore++
-                val playersOnCourtCopy = ArrayList(playersOnCourtList)
-                val playersOnBenchCopy = ArrayList(playersOnBenchList)
-                val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"serRecErr", playersOnCourtList.get(0), null)
-                actions.push(thisAction)
-                onResume()
+                createAction(0,"serRecErr")
             }
             else {
                 Toast.makeText(this, "Your team doesn't have the serve", Toast.LENGTH_SHORT).show()
             }
         })
         player1KillBtn.setOnClickListener({
-            myTeamScore++
-            if(!serveIndicator){
-                serveIndicator=true
-                rotatePlayers()
-            }
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"kill", playersOnCourtList.get(0), null)
-            actions.push(thisAction)
-            onResume()
+            myTeamScoreInc()
+            createAction(0,"kill")
         })
         player1ErrorBtn.setOnClickListener({
-            otherTeamScore++
-            if(serveIndicator){
-                serveIndicator=false
-            }
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"attackErr", playersOnCourtList.get(0), null)
-            actions.push(thisAction)
-            onResume()
+            otherTeamScoreInc()
+            createAction(0,"arrackErr")
         })
         player1HitInPlayBtn.setOnClickListener({
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"hitInPlay", playersOnCourtList.get(0), null)
-            actions.push(thisAction)
-            onResume()
+            createAction(0,"hitInPlay")
         })
         player1PassRecErrBtn.setOnClickListener({
-            otherTeamScore++
-            if(serveIndicator){
-                serveIndicator=false
-            }
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"passRecErr", playersOnCourtList.get(0), null)
-            actions.push(thisAction)
-            onResume()
+            otherTeamScoreInc()
+            createAction(0,"passRecErr")
         })
         player1DigBtn.setOnClickListener({
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"dig", playersOnCourtList.get(0), null)
-            actions.push(thisAction)
-            onResume()
+            createAction(0,"dig")
         })
         player1Pass1Btn.setOnClickListener({
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"pass1", playersOnCourtList.get(0), null)
-            actions.push(thisAction)
-            onResume()
+            createAction(0,"pass1")
         })
         player1Pass2Btn.setOnClickListener({
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"pass2", playersOnCourtList.get(0), null)
-            actions.push(thisAction)
-            onResume()
+            createAction(0,"pass2")
         })
         player1Pass3Btn.setOnClickListener({
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"pass3", playersOnCourtList.get(0), null)
-            actions.push(thisAction)
-            onResume()
+            createAction(0,"pass3")
         })
         player1AssistBtn.setOnClickListener({
-            val playersOnCourtCopy = ArrayList(playersOnCourtList)
-            val playersOnBenchCopy = ArrayList(playersOnBenchList)
-            val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"assist", playersOnCourtList.get(0), null)
-            actions.push(thisAction)
-            onResume()
+            createAction(0,"assist")
         })
         player1BallErrBtn.setOnClickListener({
-            otherTeamScore++
-            if(serveIndicator){
-                serveIndicator=false
+            otherTeamScoreInc()
+            createAction(0,"ballErr")
+        })
+        player1SubBtn.setOnClickListener({
+           subButtonHelper(0)
+        })
+
+        //declare player 2 buttons
+        val player2BlockBtn = findViewById<Button>(R.id.pos2BlockButton) as Button
+        val player2BlockAssistBtn = findViewById<Button>(R.id.pos2BlockAssistButton) as Button
+        val player2BlockErrBtn = findViewById<Button>(R.id.pos2BlockErrorButton) as Button
+        val player2KillBtn = findViewById<Button>(R.id.pos2KillButton) as Button
+        val player2ErrorBtn = findViewById<Button>(R.id.pos2AttackErrButton) as Button
+        val player2HitInPlayBtn = findViewById<Button>(R.id.pos2AttackHNPButton) as Button
+        val player2PassRecErrBtn = findViewById<Button>(R.id.pos2RecErrButton) as Button
+        val player2DigBtn = findViewById<Button>(R.id.pos2DigButton) as Button
+        val player2Pass1Btn = findViewById<Button>(R.id.pos2Pass1Button) as Button
+        val player2Pass2Btn = findViewById<Button>(R.id.pos2Pass2Button) as Button
+        val player2Pass3Btn = findViewById<Button>(R.id.pos2Pass3Button) as Button
+        val player2AssistBtn = findViewById<Button>(R.id.pos2AssistButton) as Button
+        val player2BallErrBtn = findViewById<Button>(R.id.pos2BallErrButton) as Button
+        val player2SubBtn = findViewById<Button>(R.id.pos2SubButton) as Button
+        player2BlockBtn.setOnClickListener({
+            myTeamScoreInc()
+            createAction(1,"block")
+        })
+        player2BlockAssistBtn.setOnClickListener({
+            createAction(1,"blockAssist")
+        })
+        player2BlockErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(1,"blockErr")
+        })
+        player2KillBtn.setOnClickListener({
+            myTeamScoreInc()
+            createAction(1,"kill")
+        })
+        player2ErrorBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(1,"attackErr")
+        })
+        player2HitInPlayBtn.setOnClickListener({
+            createAction(1,"hitInPlay")
+        })
+        player2PassRecErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(1,"passRecErr")
+        })
+        player2DigBtn.setOnClickListener({
+            createAction(1,"dig")
+        })
+        player2Pass1Btn.setOnClickListener({
+            createAction(1,"pass1")
+
+        })
+        player2Pass2Btn.setOnClickListener({
+            createAction(1,"pass2")
+        })
+        player2Pass3Btn.setOnClickListener({
+            createAction(1,"pass3")
+        })
+        player2AssistBtn.setOnClickListener({
+            createAction(1,"assist")
+        })
+        player2BallErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(1,"ballErr")
+        })
+        player2SubBtn.setOnClickListener({
+           subButtonHelper(1)
+        })
+
+        //declare player 3 buttons
+        val player3BlockBtn = findViewById<Button>(R.id.pos3BlockButton) as Button
+        val player3BlockAssistBtn = findViewById<Button>(R.id.pos3BlockAssistButton) as Button
+        val player3BlockErrBtn = findViewById<Button>(R.id.pos3BlockErrorButton) as Button
+        val player3KillBtn = findViewById<Button>(R.id.pos3KillButton) as Button
+        val player3ErrorBtn = findViewById<Button>(R.id.pos3AttackErrButton) as Button
+        val player3HitInPlayBtn = findViewById<Button>(R.id.pos3AttackHNPButton) as Button
+        val player3PassRecErrBtn = findViewById<Button>(R.id.pos3RecErrButton) as Button
+        val player3DigBtn = findViewById<Button>(R.id.pos3DigButton) as Button
+        val player3Pass1Btn = findViewById<Button>(R.id.pos3Pass1Button) as Button
+        val player3Pass2Btn = findViewById<Button>(R.id.pos3Pass2Button) as Button
+        val player3Pass3Btn = findViewById<Button>(R.id.pos3Pass3Button) as Button
+        val player3AssistBtn = findViewById<Button>(R.id.pos3AssistButton) as Button
+        val player3BallErrBtn = findViewById<Button>(R.id.pos3BallErrButton) as Button
+        val player3SubBtn = findViewById<Button>(R.id.pos3SubButton) as Button
+        player3BlockBtn.setOnClickListener({
+            myTeamScoreInc()
+            createAction(2,"block")
+        })
+        player3BlockAssistBtn.setOnClickListener({
+            createAction(2,"blockAssist")
+        })
+        player3BlockErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(2,"blockErr")
+        })
+        player3KillBtn.setOnClickListener({
+            myTeamScoreInc()
+            createAction(2,"kill")
+        })
+        player3ErrorBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(2,"attackErr")
+        })
+        player3HitInPlayBtn.setOnClickListener({
+            createAction(2,"hitInPlay")
+        })
+        player3PassRecErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(2,"passRecErr")
+        })
+        player3DigBtn.setOnClickListener({
+            createAction(2,"dig")
+        })
+        player3Pass1Btn.setOnClickListener({
+            createAction(2,"pass1")
+
+        })
+        player3Pass2Btn.setOnClickListener({
+            createAction(2,"pass2")
+        })
+        player3Pass3Btn.setOnClickListener({
+            createAction(2,"pass3")
+        })
+        player3AssistBtn.setOnClickListener({
+            createAction(2,"assist")
+        })
+        player3BallErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(2,"ballErr")
+        })
+        player3SubBtn.setOnClickListener({
+            subButtonHelper(2)
+        })
+
+        //declare player 4 buttons
+        val player4BlockBtn = findViewById<Button>(R.id.pos4BlockButton) as Button
+        val player4BlockAssistBtn = findViewById<Button>(R.id.pos4BlockAssistButton) as Button
+        val player4BlockErrBtn = findViewById<Button>(R.id.pos4BlockErrorButton) as Button
+        val player4KillBtn = findViewById<Button>(R.id.pos4KillButton) as Button
+        val player4ErrorBtn = findViewById<Button>(R.id.pos4AttackErrButton) as Button
+        val player4HitInPlayBtn = findViewById<Button>(R.id.pos4AttackHNPButton) as Button
+        val player4PassRecErrBtn = findViewById<Button>(R.id.pos4RecErrButton) as Button
+        val player4DigBtn = findViewById<Button>(R.id.pos4DigButton) as Button
+        val player4Pass1Btn = findViewById<Button>(R.id.pos4Pass1Button) as Button
+        val player4Pass2Btn = findViewById<Button>(R.id.pos4Pass2Button) as Button
+        val player4Pass3Btn = findViewById<Button>(R.id.pos4Pass3Button) as Button
+        val player4AssistBtn = findViewById<Button>(R.id.pos4AssistButton) as Button
+        val player4BallErrBtn = findViewById<Button>(R.id.pos4BallErrButton) as Button
+        val player4SubBtn = findViewById<Button>(R.id.pos4SubButton) as Button
+        player4BlockBtn.setOnClickListener({
+            myTeamScoreInc()
+            createAction(3,"block")
+        })
+        player4BlockAssistBtn.setOnClickListener({
+            createAction(3,"blockAssist")
+        })
+        player4BlockErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(3,"blockErr")
+        })
+        player4KillBtn.setOnClickListener({
+            myTeamScoreInc()
+            createAction(3,"kill")
+        })
+        player4ErrorBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(3,"attackErr")
+        })
+        player4HitInPlayBtn.setOnClickListener({
+            createAction(3,"hitInPlay")
+        })
+        player4PassRecErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(3,"passRecErr")
+        })
+        player4DigBtn.setOnClickListener({
+            createAction(3,"dig")
+        })
+        player4Pass1Btn.setOnClickListener({
+            createAction(3,"pass1")
+
+        })
+        player4Pass2Btn.setOnClickListener({
+            createAction(3,"pass2")
+        })
+        player4Pass3Btn.setOnClickListener({
+            createAction(3,"pass3")
+        })
+        player4AssistBtn.setOnClickListener({
+            createAction(3,"assist")
+        })
+        player4BallErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(3,"ballErr")
+        })
+        player4SubBtn.setOnClickListener({
+            subButtonHelper(3)
+        })
+
+        //declare player 5 buttons
+        val player5KillBtn = findViewById<Button>(R.id.pos5KillButton) as Button
+        val player5ErrorBtn = findViewById<Button>(R.id.pos5AttackErrButton) as Button
+        val player5HitInPlayBtn = findViewById<Button>(R.id.pos5AttackHNPButton) as Button
+        val player5PassRecErrBtn = findViewById<Button>(R.id.pos5RecErrButton) as Button
+        val player5DigBtn = findViewById<Button>(R.id.pos5DigButton) as Button
+        val player5Pass1Btn = findViewById<Button>(R.id.pos5Pass1Button) as Button
+        val player5Pass2Btn = findViewById<Button>(R.id.pos5Pass2Button) as Button
+        val player5Pass3Btn = findViewById<Button>(R.id.pos5Pass3Button) as Button
+        val player5AssistBtn = findViewById<Button>(R.id.pos5AssistButton) as Button
+        val player5BallErrBtn = findViewById<Button>(R.id.pos5BallErrButton) as Button
+        val player5SubBtn = findViewById<Button>(R.id.pos5SubButton) as Button
+        player5KillBtn.setOnClickListener({
+            myTeamScoreInc()
+            createAction(4,"kill")
+        })
+        player5ErrorBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(4,"attackErr")
+        })
+        player5HitInPlayBtn.setOnClickListener({
+            createAction(4,"hitInPlay")
+        })
+        player5PassRecErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(4,"passRecErr")
+        })
+        player5DigBtn.setOnClickListener({
+            createAction(4,"dig")
+        })
+        player5Pass1Btn.setOnClickListener({
+            createAction(4,"pass1")
+        })
+        player5Pass2Btn.setOnClickListener({
+            createAction(4,"pass2")
+        })
+        player5Pass3Btn.setOnClickListener({
+            createAction(4,"pass3")
+        })
+        player5AssistBtn.setOnClickListener({
+            createAction(4,"assist")
+        })
+        player5BallErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(4,"ballErr")
+        })
+        player5SubBtn.setOnClickListener({
+            subButtonHelper(4)
+        })
+
+        //declare player 6 buttons
+        val player6KillBtn = findViewById<Button>(R.id.pos6KillButton) as Button
+        val player6ErrorBtn = findViewById<Button>(R.id.pos6AttackErrButton) as Button
+        val player6HitInPlayBtn = findViewById<Button>(R.id.pos6AttackHNPButton) as Button
+        val player6PassRecErrBtn = findViewById<Button>(R.id.pos6RecErrButton) as Button
+        val player6DigBtn = findViewById<Button>(R.id.pos6DigButton) as Button
+        val player6Pass1Btn = findViewById<Button>(R.id.pos6Pass1Button) as Button
+        val player6Pass2Btn = findViewById<Button>(R.id.pos6Pass2Button) as Button
+        val player6Pass3Btn = findViewById<Button>(R.id.pos6Pass3Button) as Button
+        val player6AssistBtn = findViewById<Button>(R.id.pos6AssistButton) as Button
+        val player6BallErrBtn = findViewById<Button>(R.id.pos6BallErrButton) as Button
+        val player6SubBtn = findViewById<Button>(R.id.pos6SubButton) as Button
+        player6KillBtn.setOnClickListener({
+            myTeamScoreInc()
+            createAction(5,"kill")
+        })
+        player6ErrorBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(5,"attackErr")
+        })
+        player6HitInPlayBtn.setOnClickListener({
+            createAction(5,"hitInPlay")
+        })
+        player5PassRecErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(4,"passRecErr")
+        })
+        player5DigBtn.setOnClickListener({
+            createAction(4,"dig")
+        })
+        player5Pass1Btn.setOnClickListener({
+            createAction(4,"pass1")
+        })
+        player5Pass2Btn.setOnClickListener({
+            createAction(4,"pass2")
+        })
+        player5Pass3Btn.setOnClickListener({
+            createAction(4,"pass3")
+        })
+        player5AssistBtn.setOnClickListener({
+            createAction(4,"assist")
+        })
+        player5BallErrBtn.setOnClickListener({
+            otherTeamScoreInc()
+            createAction(4,"ballErr")
+        })
+        player5SubBtn.setOnClickListener({
+            subButtonHelper(4)
+        })
+    }
+    fun myTeamScoreInc(){
+        myTeamScore++
+        if(!serveIndicator){
+            serveIndicator=true
+            rotatePlayers()
+        }
+    }
+    fun otherTeamScoreInc(){
+        otherTeamScore++
+        if(serveIndicator){
+            serveIndicator=false
+        }
+    }
+
+    //this function will create the alert box for chosing the player to be subbed in. This prevents
+    //the code from having to be dublicated 6 times.
+    fun subButtonHelper(p: Int){
+        val li = LayoutInflater.from(this)
+        val promptsView = li.inflate(R.layout.sub_player_alert, null)
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setView(promptsView)
+        // set dialog message
+        alertDialogBuilder.setTitle("Please Select Player")
+        //alertDialogBuilder.setIcon(R.drawable)
+        // create alert dialog
+        val alertDialog = alertDialogBuilder.create()
+        val mSpinner = promptsView.findViewById<Spinner>(R.id.subSpinner) as Spinner
+        val mButton = promptsView.findViewById<Button>(R.id.subButton) as Button
+        val cancel = promptsView.findViewById<Button>(R.id.subCancelButton) as Button
+        var chosenPlayer = Player()
+        var currentPlayer = playersOnCourtList.get(p)
+        var positionInt = 0
+        val benchNameList = ArrayList<String>()
+        for(i in 0..playersOnBenchList.size-1){
+            benchNameList.add(playersOnBenchList.get(i).getFirstName()+" "+playersOnBenchList.get(i).getLastName())
+        }
+        val subPlayerAdapter = ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item,benchNameList)
+        mSpinner.setAdapter(subPlayerAdapter)
+        mSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                chosenPlayer = playersOnBenchList.get(position)
+                positionInt = position
             }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        }
+        cancel.setOnClickListener({
+            alertDialog.dismiss()
+        })
+        mButton.setOnClickListener({
+            //playersOnBenchList.remove(chosenPlayer)
+            mySubsUsed++
+            playersOnBenchList.set(positionInt,currentPlayer)
+            playersOnCourtList.set(p,chosenPlayer)
+            alertDialog.dismiss()
             val playersOnCourtCopy = ArrayList(playersOnCourtList)
             val playersOnBenchCopy = ArrayList(playersOnBenchList)
             val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"ballErr", playersOnCourtList.get(0), null)
+                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"sub", currentPlayer, chosenPlayer)
             actions.push(thisAction)
             onResume()
         })
-        player1SubBtn.setOnClickListener({
+        alertDialog.show()
+        alertDialog.setCanceledOnTouchOutside(false)
+    }
+    //this function will create the action nodes
+    fun createAction(p:Int,a:String){
+        val playersOnCourtCopy = ArrayList(playersOnCourtList)
+        val playersOnBenchCopy = ArrayList(playersOnBenchList)
+        val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
+                otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,a, playersOnCourtList[p], null)
+        actions.push(thisAction)
+        onResume()
+    }
+    //this function is for rotating the players on the court
+    fun rotatePlayers(){
+        if(!libPlayer.equals(intialLibPlayer)){
             val li = LayoutInflater.from(this)
-
-            val promptsView = li.inflate(R.layout.sub_player_alert, null)
-
+            val promptsView = li.inflate(R.layout.lib_rotate_out, null)
             val alertDialogBuilder = AlertDialog.Builder(this)
-
             alertDialogBuilder.setView(promptsView)
-
             // set dialog message
-
-            alertDialogBuilder.setTitle("Please Select Player")
+            alertDialogBuilder.setTitle("NOTICE!!!")
             //alertDialogBuilder.setIcon(R.drawable)
             // create alert dialog
             val alertDialog = alertDialogBuilder.create()
-            val mSpinner = promptsView.findViewById<Spinner>(R.id.subSpinner) as Spinner
-            val mButton = promptsView.findViewById<Button>(R.id.subButton) as Button
-            val cancel = promptsView.findViewById<Button>(R.id.subCancelButton) as Button
-            var chosenPlayer = Player()
-            var currentPlayer = playersOnCourtList.get(0)
-            var positionInt = 0
-            val benchNameList = ArrayList<String>()
-            for(i in 0..playersOnBenchList.size-1){
-                benchNameList.add(playersOnBenchList.get(i).getFirstName()+" "+playersOnBenchList.get(i).getLastName())
-            }
-            val subPlayerAdapter = ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item,benchNameList)
-            mSpinner.setAdapter(subPlayerAdapter)
-            mSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                    chosenPlayer = playersOnBenchList.get(position)
-                    positionInt = position
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-            }
-            cancel.setOnClickListener({
-                alertDialog.dismiss()
-            })
+            val mButton = promptsView.findViewById<Button>(R.id.libRotateOkBtn) as Button
             mButton.setOnClickListener({
-                //playersOnBenchList.remove(chosenPlayer)
-                mySubsUsed++
-                playersOnBenchList.set(positionInt,currentPlayer)
-                playersOnCourtList.set(0,chosenPlayer)
                 alertDialog.dismiss()
-                val playersOnCourtCopy = ArrayList(playersOnCourtList)
-                val playersOnBenchCopy = ArrayList(playersOnBenchList)
-                val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"sub", currentPlayer, chosenPlayer)
-                actions.push(thisAction)
-                onResume()
             })
             alertDialog.show()
             alertDialog.setCanceledOnTouchOutside(false)
-        })
-    }
-
-    //this function is for rotating the players on the court
-    fun rotatePlayers(){
+            var currentPlayer = libPlayer
+            for(i in 0..playersOnCourtList.size-1){
+                if(playersOnCourtList[i].equals(intialLibPlayer)){
+                    libPlayer = intialLibPlayer
+                    playersOnCourtList.set(i,currentPlayer)
+                    break;
+                }
+            }
+        }
         if(rotation<6) {
             rotation++
         }
