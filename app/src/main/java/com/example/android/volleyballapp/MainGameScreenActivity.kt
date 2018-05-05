@@ -100,7 +100,7 @@ class MainGameScreenActivity : AppCompatActivity() {
             }
         }
         intialOnCourtList = ArrayList(playersOnCourtList)
-        intialOnBenchList = playersOnBenchList
+        intialOnBenchList = ArrayList(playersOnBenchList)
         intialLibPlayer = libPlayer
         intialServeIndicator = serveIndicator
 
@@ -383,6 +383,9 @@ class MainGameScreenActivity : AppCompatActivity() {
         })
         player1ErrorBtn.setOnClickListener({
             otherTeamScore++
+            if(serveIndicator){
+                serveIndicator=false
+            }
             val playersOnCourtCopy = ArrayList(playersOnCourtList)
             val playersOnBenchCopy = ArrayList(playersOnBenchList)
             val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
@@ -400,6 +403,9 @@ class MainGameScreenActivity : AppCompatActivity() {
         })
         player1PassRecErrBtn.setOnClickListener({
             otherTeamScore++
+            if(serveIndicator){
+                serveIndicator=false
+            }
             val playersOnCourtCopy = ArrayList(playersOnCourtList)
             val playersOnBenchCopy = ArrayList(playersOnBenchList)
             val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
@@ -449,6 +455,9 @@ class MainGameScreenActivity : AppCompatActivity() {
         })
         player1BallErrBtn.setOnClickListener({
             otherTeamScore++
+            if(serveIndicator){
+                serveIndicator=false
+            }
             val playersOnCourtCopy = ArrayList(playersOnCourtList)
             val playersOnBenchCopy = ArrayList(playersOnBenchList)
             val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
@@ -498,6 +507,7 @@ class MainGameScreenActivity : AppCompatActivity() {
             })
             mButton.setOnClickListener({
                 //playersOnBenchList.remove(chosenPlayer)
+                mySubsUsed++
                 playersOnBenchList.set(positionInt,currentPlayer)
                 playersOnCourtList.set(0,chosenPlayer)
                 alertDialog.dismiss()
@@ -521,10 +531,10 @@ class MainGameScreenActivity : AppCompatActivity() {
         else{
             rotation = 1
         }
-        val tempPlayer = playersOnCourtList.get(5)
-        for(i in 5 downTo 1 step 1){
-            playersOnCourtList.set(i,playersOnCourtList.get(i-1))
+        val tempPlayer = playersOnCourtList.get(0)
+        for(i in 0..4){
+            playersOnCourtList.set(i,playersOnCourtList.get(i+1))
         }
-        playersOnCourtList.set(0,tempPlayer)
+        playersOnCourtList.set(5,tempPlayer)
     }
 }
