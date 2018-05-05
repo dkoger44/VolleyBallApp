@@ -32,6 +32,7 @@ class SelectLineUpActivity : AppCompatActivity() {
 
         //declaring editText field
         val opName = findViewById<EditText>(R.id.opponentEditText) as EditText
+        val opponent = opName.text.toString()
 
         //declaring buttons
         val homeBtn = findViewById<Button>(R.id.rosterHomeButton) as Button
@@ -89,10 +90,11 @@ class SelectLineUpActivity : AppCompatActivity() {
         */
 
         //val lineUp = arrayOfNulls<String>(7)
-        val lineUp = arrayOf(" "," "," "," "," "," "," ")
+        val lineUp = arrayOf(0,0,0,0,0,0,0)
+        var libSpinPosChec = 0
         p1Spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                lineUp[0] = lineUpOptions[position].toString()
+                lineUp[0] = position
                 //if(position>0){
                 //    p1Spin.setBackgroundColor(Color.WHITE)
                 // }
@@ -104,7 +106,7 @@ class SelectLineUpActivity : AppCompatActivity() {
         }
         p2Spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                lineUp[1] = lineUpOptions[position].toString()
+                lineUp[1] = position
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -113,7 +115,7 @@ class SelectLineUpActivity : AppCompatActivity() {
         }
         p3Spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                lineUp[2] = lineUpOptions[position].toString()
+                lineUp[2] = position
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -122,7 +124,7 @@ class SelectLineUpActivity : AppCompatActivity() {
         }
         p4Spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                lineUp[3] = lineUpOptions[position].toString()
+                lineUp[3] = position
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -131,7 +133,7 @@ class SelectLineUpActivity : AppCompatActivity() {
         }
         p5Spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                lineUp[4] = lineUpOptions[position].toString()
+                lineUp[4] = position
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -140,7 +142,7 @@ class SelectLineUpActivity : AppCompatActivity() {
         }
         p6Spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                lineUp[5] = lineUpOptions[position].toString()
+                lineUp[5] = position
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -149,7 +151,8 @@ class SelectLineUpActivity : AppCompatActivity() {
         }
         libSpin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                lineUp[6] = lineUpOptions[position].toString()
+                lineUp[6] = position
+                libSpinPosChec = position
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -157,24 +160,73 @@ class SelectLineUpActivity : AppCompatActivity() {
             }
         }
 
+        //serveCheckBox
+        val startServe = findViewById<CheckBox>(R.id.startingServeCheck) as CheckBox
+        var serveChecked = false
+        startServe.setOnClickListener({
+            serveChecked = startServe.isChecked
+        })
+
         doneBtn.setOnClickListener({
             //check to see if the lineup has been filled out
             var lineUpCheck = true
             val noDuplicatesLineUp = lineUp.distinct()
+
 
             if(noDuplicatesLineUp.size<7){
                 lineUpCheck = false
             }
             else{
                 for(i in 0..noDuplicatesLineUp.size-2){
-                    if (noDuplicatesLineUp[i] == " ")
+                    if (noDuplicatesLineUp[i] == 0)
                         lineUpCheck = false
                 }
             }
             if(lineUpCheck) {
+                //NOTE: lineUp[i]-1 is the position of the player in the original player array
+                var startingPlayersList : MutableList<Player> = ArrayList()
+                if(libSpinPosChec!=0) {
+                    for (i in 0..lineUp.size - 1) {
+                        startingPlayersList.add(playersOnTeam.get(lineUp[i] - 1))
+                    }
+                }
+                //this loop is needed if the libero position was selected so as to prevent an array out of bounds
+                else{
+                    for (i in 0..lineUp.size - 2) {
+                        startingPlayersList.add(playersOnTeam.get(lineUp[i] - 1))
+                    }
+                }
+                var liberoCheck = false
                 //create intent
-                Toast.makeText(this,"Creating Intent",Toast.LENGTH_LONG).show()
+                //Toast.makeText(this,"Creating Intent",Toast.LENGTH_LONG).show()
+
                 //need to send players, team object, and opponent team name through intent.
+                val intent = Intent(this,MainGameScreenActivity::class.java)
+                //pass team object
+                intent.putExtra("Team Object",selectedTeam)
+                //pass playerStartingLineUp array
+                //TODO use parcel to pass array rather than individual players
+                intent.putExtra("player1",startingPlayersList[0])
+                intent.putExtra("player2",startingPlayersList[1])
+                intent.putExtra("player3",startingPlayersList[2])
+                intent.putExtra("player4",startingPlayersList[3])
+                intent.putExtra("player5",startingPlayersList[4])
+                intent.putExtra("player6",startingPlayersList[5])
+                if(startingPlayersList.size>6){
+                    intent.putExtra("libero",startingPlayersList[6])
+                    liberoCheck = true
+                }
+                //pass opposing team name
+                intent.putExtra("Opponent Name",opponent)
+
+                //pass Libero boolean flag
+                intent.putExtra("Libero Check",liberoCheck)
+
+                //pass the serveIndicator
+                intent.putExtra("startingServe",serveChecked)
+                //start activity
+                startActivity(intent)
+
             }
             else{
                 Toast.makeText(this,"Please enter different players for positions",Toast.LENGTH_LONG).show()
