@@ -44,6 +44,7 @@ class AddTeamActivity : AppCompatActivity() {
                 val team = Team(teamNameView.text.toString(),teamTypes[selectedType],year.toString())
                 var db = DBHandler(context)
                 db.insertTeamData(team)
+                db.insertTeamSchedule(team)
                 finish()
             }else{
                 Toast.makeText(context,"Please input team information",Toast.LENGTH_SHORT)

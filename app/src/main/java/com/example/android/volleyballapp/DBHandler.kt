@@ -207,6 +207,18 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         db?.execSQL(createPlayerGameTable)
     }
+    //inserting schedule into database
+    fun insertTeamSchedule(team:Team){
+        val db = this.writableDatabase
+        var cv = ContentValues()
+        cv.put(COL_SCHEDULE_TEAMNAME,team.getName())
+        var result = db.insert(SCHEDULE_TABLE_NAME,null,cv)
+        if(result == -1.toLong())
+            Toast.makeText(context,"ERROR CREATING SCHEDULE",Toast.LENGTH_LONG).show()
+        else
+            Toast.makeText(context,"Success making Schedule",Toast.LENGTH_SHORT).show()
+        db.close()
+    }
     //inserting value into Team table
     fun insertTeamData(team: Team){
         val db = this.writableDatabase
