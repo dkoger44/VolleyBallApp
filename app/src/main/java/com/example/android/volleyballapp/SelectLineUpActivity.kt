@@ -226,6 +226,7 @@ class SelectLineUpActivity : AppCompatActivity() {
                 intent.putExtra("startingServe",serveChecked)
                 //start activity
                 startActivity(intent)
+                finish()
 
             }
             else{

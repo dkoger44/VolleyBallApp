@@ -33,6 +33,7 @@ var teamName = ""
                 val intent = Intent(this, SelectLineUpActivity::class.java)
                 intent.putExtra("TeamObject", teamName)
                 startActivity(intent)
+                finish()
             }
             else{
                 Toast.makeText(this,"Please Select a Team with At Least 6 players!",Toast.LENGTH_LONG).show()

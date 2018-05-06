@@ -16,6 +16,9 @@ public class Team implements Serializable  {
         type = t;
         season = s;
     }
+    Team(){
+
+    }
 
     Team(String n){
         name = n;
