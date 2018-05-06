@@ -91,7 +91,11 @@ public class SelectPlayerRosterListAdapter extends BaseAdapter implements ListAd
         playerStatsBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                String playerID = listItemID.getText().toString();
 
+                Intent viewPlayerStats = new Intent(v.getContext(),PlayerStatView.class);
+                viewPlayerStats.putExtra("PlayerID",playerID);
+                v.getContext().startActivity(viewPlayerStats);
             }
         });
 

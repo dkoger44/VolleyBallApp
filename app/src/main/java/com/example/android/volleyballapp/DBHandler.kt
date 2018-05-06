@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
 import android.provider.SyncStateContract.Helpers.update
+import android.util.Log
 import com.example.android.volleyballapp.R.id.playerID
 import java.time.DayOfWeek
 import java.util.*
@@ -214,6 +215,58 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         db?.execSQL(createPlayerGameTable)
     }
+    fun selectAllFromGameTable(){
+        val db = this.readableDatabase
+        val projection = arrayOf(COL_GAME_GAMEID,COL_GAME_DATE,COL_GAME_LOCATION,COL_GAME_OPPONENT
+                ,COL_GAME_SCHEDULEID)
+        val cursor = db.query(GAME_TABLE_NAME,projection,null,null,null,null,null)
+        if(cursor.moveToFirst()){
+            do{
+                Log.d("gameID","Is "+cursor.getInt(0))
+            }while(cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+    }
+    //get player stats from PlayerGameTable
+    fun getPlayerStats(player:Player,gameID:Int){
+        val db = this.readableDatabase
+
+        if(player != null){
+
+            val selection = COL_PG_PLAYER + " =? and "+ COL_PG_GAME + " =?"
+            var playerIDNUM = arrayOf(player.getID().toString(),gameID.toString())
+            val projection = arrayOf(COL_PG_PLAYER,COL_PG_GAME,COL_PG_KILLS, COL_PG_ERRORS, COL_PG_TOTAL_ATTACKS, COL_PG_HITTING_PERCENTAGE,
+                    COL_PG_ASSISTS, COL_PG_BALL_ERRORS, COL_PG_SERVICE_ACES, COL_PG_SERVE_ATTEMPTS, COL_PG_RECEPTION_ERRORS, COL_PG_RECEPTION_ATTEMPTS,
+                    COL_PG_PASS_PERCENTAGE,COL_PG_DIGS, COL_PG_BLOCK_SOLO, COL_PG_BLOCK_ASSISTS, COL_PG_BLOCK_ERRORS)
+
+            val cursor = db.query(PLAYER_GAME_TABLE_NAME, projection, selection, playerIDNUM, null, null, null)
+            if(cursor.moveToFirst()){
+                do{
+                   // gameID = cursor.getInt(1).toString().toInt()
+                    player.setKills(cursor.getInt(2).toString().toInt())
+                    player.setAttackErrors(cursor.getInt(3).toString().toInt())
+                    player.setTotalAttacks(cursor.getInt(4).toString().toInt())
+                    player.setHittingPercentage(cursor.getString(5).toString().toDouble())
+                    player.setAssists(cursor.getInt(6).toString().toInt())
+                    player.setBallErrors(cursor.getInt(7).toString().toInt())
+                    player.setAces(cursor.getInt(8).toString().toInt())
+                    player.setServeAttempts(cursor.getInt(9).toString().toInt())
+                    player.setReceptionErrors(cursor.getInt(10).toString().toInt())
+                    player.setReceptionAttempts(cursor.getInt(11).toString().toInt())
+                    player.setPassPercentage(cursor.getString(12).toString().toDouble())
+                    player.setDigs(cursor.getInt(13).toString().toInt())
+                    player.setSoloBlock(cursor.getInt(14).toString().toInt())
+                    player.setBlockAssists(cursor.getInt(15).toString().toInt())
+                    player.setBlockErrors(cursor.getInt(16).toString().toInt())
+                    break
+                }while(cursor.moveToNext())
+            }
+            cursor.close()
+            db.close()
+        }
+
+    }
     //insert into PlayerGameTable
     fun insertPlayerGameTable(player:Player,game:Int){
         val db = this.writableDatabase
@@ -241,6 +294,27 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         else
             Toast.makeText(context,"Success Inserting Stats",Toast.LENGTH_SHORT).show()
         db.close()
+    }
+    //get opponent name from the gameID
+    fun getOpponentName(gID:Int):String{
+        val db = this.readableDatabase
+        var opponentName=""
+        // var list : MutableList<String> = ArrayList()
+        val selection = COL_GAME_GAMEID + " =?"
+        //projection will be the array of columns that will be queried
+        val projection = arrayOf(COL_GAME_GAMEID, COL_GAME_DATE, COL_GAME_LOCATION, COL_GAME_OPPONENT, COL_GAME_SCHEDULEID)
+        val whereArray = arrayOf(gID.toString())
+        val cursor = db.query(GAME_TABLE_NAME, projection, selection, whereArray, null, null, null)
+        if (cursor.moveToFirst()) {
+            do {
+                opponentName = cursor.getString(3).toString()
+                break
+
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return opponentName
     }
     //getting gameID
     fun getGameID(s:String,opp:String):Int{
