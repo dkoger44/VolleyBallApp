@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
 import android.provider.SyncStateContract.Helpers.update
 import com.example.android.volleyballapp.R.id.playerID
+import java.time.DayOfWeek
+import java.util.*
 
 
 val DATABASE_NAME = "VolleyBall"
@@ -34,7 +36,7 @@ val COL_SCHEDULE_ID = "id"
 val COL_SCHEDULE_TEAMNAME = "teamName"
 val COL_PG_PLAYER = "playerID"
 val COL_PG_GAME = "gID"
-val COL_PG_KILLS = "kiils"
+val COL_PG_KILLS = "kills"
 val COL_PG_ERRORS = "errors"
 val COL_PG_TOTAL_ATTACKS = "totalAttacks"
 //nmay compute hitting percentage rather than store it
@@ -45,6 +47,7 @@ val COL_PG_SERVICE_ACES = "serviceAces"
 val COL_PG_SERVE_ATTEMPTS = "serveAttempts"
 val COL_PG_RECEPTION_ERRORS = "receptionErrors"
 val COL_PG_RECEPTION_ATTEMPTS = "receptionAttempts"
+val COL_PG_PASS_PERCENTAGE = "passPercentage"
 val COL_PG_DIGS = "digs"
 val COL_PG_BLOCK_SOLO = "blockSolos"
 val COL_PG_BLOCK_ASSISTS = "blockAssists"
@@ -110,12 +113,14 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 COL_PG_KILLS + " INTEGER," +
                 COL_PG_ERRORS + " INTEGER," +
                 COL_PG_TOTAL_ATTACKS + " INTEGER," +
+                COL_PG_HITTING_PERCENTAGE + " VARCHAR(50)," +
                 COL_PG_ASSISTS + " INTEGER," +
                 COL_PG_BALL_ERRORS + " INTEGER," +
                 COL_PG_SERVICE_ACES + " INTEGER," +
                 COL_PG_SERVE_ATTEMPTS + " INTEGER," +
                 COL_PG_RECEPTION_ERRORS + " INTEGER," +
                 COL_PG_RECEPTION_ATTEMPTS + " INTEGER," +
+                COL_PG_PASS_PERCENTAGE + " VARCHAR(50)," +
                 COL_PG_DIGS + " INTEGER," +
                 COL_PG_BLOCK_SOLO + " INTEGER," +
                 COL_PG_BLOCK_ASSISTS + " INTEGER," +
@@ -190,12 +195,14 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 COL_PG_KILLS + " INTEGER," +
                 COL_PG_ERRORS + " INTEGER," +
                 COL_PG_TOTAL_ATTACKS + " INTEGER," +
+                COL_PG_HITTING_PERCENTAGE + " VARCHAR(50)," +
                 COL_PG_ASSISTS + " INTEGER," +
                 COL_PG_BALL_ERRORS + " INTEGER," +
                 COL_PG_SERVICE_ACES + " INTEGER," +
                 COL_PG_SERVE_ATTEMPTS + " INTEGER," +
                 COL_PG_RECEPTION_ERRORS + " INTEGER," +
                 COL_PG_RECEPTION_ATTEMPTS + " INTEGER," +
+                COL_PG_PASS_PERCENTAGE + "VARCHAR(50),"
                 COL_PG_DIGS + " INTEGER," +
                 COL_PG_BLOCK_SOLO + " INTEGER," +
                 COL_PG_BLOCK_ASSISTS + " INTEGER," +
@@ -203,9 +210,93 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 "FOREIGN KEY(" + COL_PG_PLAYER + ") REFERENCES " +
                 PLAYER_TABLE_NAME + "(" + COL_PLAYER_ID +") ON DELETE CASCADE, " +
                 "FOREIGN KEY(" + COL_PG_GAME + ") REFERENCES " +
-                GAME_TABLE_NAME + "(" + COL_GAME_GAMEID + ") ON DELETE CASCADE)"
+                GAME_TABLE_NAME + "(" + COL_GAME_GAMEID + ") ON DELETE CASCADE))"
 
         db?.execSQL(createPlayerGameTable)
+    }
+    //insert into PlayerGameTable
+    fun insertPlayerGameTable(player:Player,game:Int){
+        val db = this.writableDatabase
+        var cv = ContentValues()
+        cv.put(COL_PG_PLAYER,player.getID())
+        cv.put(COL_PG_GAME,game)
+        cv.put(COL_PG_KILLS,player.getKills())
+        cv.put(COL_PG_ERRORS,player.getAttackErrors())
+        cv.put(COL_PG_TOTAL_ATTACKS,player.getTotalAttacks())
+        cv.put(COL_PG_HITTING_PERCENTAGE,player.getHittingPercentage())
+        cv.put(COL_PG_ASSISTS,player.getAssists())
+        cv.put(COL_PG_BALL_ERRORS,player.getBallErrors())
+        cv.put(COL_PG_SERVICE_ACES,player.getAces())
+        cv.put(COL_PG_SERVE_ATTEMPTS,player.getServeAttempts())
+        cv.put(COL_PG_RECEPTION_ERRORS,player.getReceptionErrors())
+        cv.put(COL_PG_RECEPTION_ATTEMPTS,player.getReceptionAttempts())
+        cv.put(COL_PG_PASS_PERCENTAGE,player.getPassPercentage())
+        cv.put(COL_PG_DIGS,player.getDigs())
+        cv.put(COL_PG_BLOCK_SOLO,player.getSoloBlock())
+        cv.put(COL_PG_BLOCK_ASSISTS,player.getBlockAssists())
+        cv.put(COL_PG_BLOCK_ERRORS,player.getBlockErrors())
+        var result = db.insert(PLAYER_GAME_TABLE_NAME,null,cv)
+        if(result==-1.toLong())
+            Toast.makeText(context,"Error inserting Stats",Toast.LENGTH_LONG).show()
+        else
+            Toast.makeText(context,"Success Inserting Stats",Toast.LENGTH_SHORT).show()
+        db.close()
+    }
+    //getting gameID
+    fun getGameID(s:String,opp:String):Int{
+        val db = this.readableDatabase
+        var id = -1
+       // var list : MutableList<String> = ArrayList()
+        val selection = COL_GAME_SCHEDULEID + " =? and "+ COL_GAME_OPPONENT + " =?"
+        //projection will be the array of columns that will be queried
+        val projection = arrayOf(COL_GAME_GAMEID, COL_GAME_DATE, COL_GAME_LOCATION, COL_GAME_OPPONENT, COL_GAME_SCHEDULEID)
+        val whereArray = arrayOf(s,opp)
+        val cursor = db.query(GAME_TABLE_NAME, projection, selection, whereArray, null, null, null)
+        if (cursor.moveToFirst()) {
+            do {
+                id = cursor.getInt(0)
+                break
+
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return id
+    }
+    //inserting game into gameTable
+    fun insertGame(s:String,opp:String){
+        val db = this.writableDatabase
+        var cv = ContentValues()
+        cv.put(COL_GAME_DATE,"5/7/2018")
+        cv.put(COL_GAME_LOCATION,"Lexington, KY")
+        cv.put(COL_GAME_OPPONENT,opp)
+        cv.put(COL_GAME_SCHEDULEID,s.toInt())
+        var result = db.insert(GAME_TABLE_NAME,null,cv)
+        if(result == -1.toLong())
+            Toast.makeText(context,"ERROR CREATING Game",Toast.LENGTH_LONG).show()
+        else
+            Toast.makeText(context,"Success making Game",Toast.LENGTH_SHORT).show()
+        db.close()
+    }
+    //get the teams schedule id
+    fun getTeamSchedule(team:Team):MutableList<String>{
+        val db = this.readableDatabase
+        var list : MutableList<String> = ArrayList()
+        val selection = COL_SCHEDULE_TEAMNAME + " =?"
+        //projection will be the array of columns that will be queried
+        val projection = arrayOf(COL_SCHEDULE_ID, COL_SCHEDULE_TEAMNAME)
+        val teamName = arrayOf(team.getName())
+        val cursor = db.query(PLAYER_TABLE_NAME, projection, selection, teamName, null, null, null)
+        if (cursor.moveToFirst()) {
+            do {
+                var id = cursor.getString(0).toString()
+
+                list.add(id)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return list
     }
     //inserting schedule into database
     fun insertTeamSchedule(team:Team){
@@ -269,9 +360,7 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     //getting all entries in Team table
     fun readTeamData() :MutableList<Team>{
         var list : MutableList<Team> = ArrayList()
-
         val db = this.readableDatabase
-        
         //projection will be the array of columns that will be queried
         val projection = arrayOf(COL_TEAM_NAME, COL_TEAM_TYPE, COL_TEAM_SEASON)
 

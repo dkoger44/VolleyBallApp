@@ -15,11 +15,14 @@ import android.widget.*
 
 
 class MainGameScreenActivity : AppCompatActivity() {
+    var playingTeam = Team()
+    var opponentName = ""
     var startingPlayersList : MutableList<Player> = ArrayList()
     var playersOnCourtList : MutableList<Player> = ArrayList()
     var intialOnCourtList : MutableList<Player> = ArrayList()
     var playersOnBenchList : MutableList<Player> = ArrayList()
     var intialOnBenchList : MutableList<Player> = ArrayList()
+    var playersOnTeamList : MutableList<Player> = ArrayList()
     var libPlayer = Player()
     var intialLibPlayer = Player()
     var libCheck = false
@@ -37,6 +40,8 @@ class MainGameScreenActivity : AppCompatActivity() {
     var myTO = 2
     var otherTeamTO = 2
     val actions = ActionStack();
+    var serveAttempt = false;
+    var server = Player()
     val actionStrings = arrayOf("ace","missedServe","serveRecErr","kill","attackErr","hitInPlay","passRecErr"
     ,"dig","pass1","pass2","pass3","assist","ballErr","sub")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,8 +58,8 @@ class MainGameScreenActivity : AppCompatActivity() {
         val player6 = previousIntent.getSerializableExtra("player6") as Player
         libCheck = previousIntent.getBooleanExtra("Libero Check",false)
 
-        val playingTeam = previousIntent.getSerializableExtra("Team Object") as Team
-        val opponentName = previousIntent.getStringExtra("Opponent Name")
+        playingTeam = previousIntent.getSerializableExtra("Team Object") as Team
+        opponentName = previousIntent.getStringExtra("Opponent Name")
         serveIndicator = previousIntent.getBooleanExtra("startingServe",true)
 
         //put starting players in list and on the court
@@ -78,7 +83,7 @@ class MainGameScreenActivity : AppCompatActivity() {
         //creating db handler to access database
         val DB = DBHandler(this)
         //grabbing the entire team roster
-        val playersOnTeamList = DB.readPlayerData(playingTeam)
+        playersOnTeamList = DB.readPlayerData(playingTeam)
         //for each player on the roster we should check to see if they are a starting player
         for(i in 0..playersOnTeamList.size-1){
             var addToBenchCheck = false
@@ -242,7 +247,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                     val playersOnCourtCopy = ArrayList(playersOnCourtList)
                     val playersOnBenchCopy = ArrayList(playersOnBenchList)
                     val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                            otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "libSwap", currentPlayer, chosenPlayer)
+                            otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "libSwap", currentPlayer, chosenPlayer,null,null)
                     actions.push(thisAction)
                     onResume()
                 })
@@ -261,7 +266,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                 val playersOnCourtCopy = ArrayList(playersOnCourtList)
                 val playersOnBenchCopy = ArrayList(playersOnBenchList)
                 val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "reverseLibSwap", currentPlayer, intialLibPlayer)
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "reverseLibSwap", currentPlayer, intialLibPlayer,null,null)
                 actions.push(thisAction)
                 onResume()
             }
@@ -279,7 +284,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                 val playersOnCourtCopy = ArrayList(playersOnCourtList)
                 val playersOnBenchCopy = ArrayList(playersOnBenchList)
                 val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "ourTO", null, null)
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "ourTO", null, null,null,null)
                 actions.push(thisAction)
                 onResume()
             }
@@ -293,7 +298,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                 val playersOnCourtCopy = ArrayList(playersOnCourtList)
                 val playersOnBenchCopy = ArrayList(playersOnBenchList)
                 val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "otherTeamUseTO", null, null)
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "otherTeamUseTO", null, null,null,null)
                 actions.push(thisAction)
                 onResume()
             }
@@ -314,7 +319,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                 val playersOnCourtCopy = ArrayList(playersOnCourtList)
                 val playersOnBenchCopy = ArrayList(playersOnBenchList)
                 val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"gameEnd", null, null)
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"gameEnd", null, null,null,null)
                 actions.push(thisAction)
                 onResume()
             }
@@ -325,7 +330,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                 val playersOnCourtCopy = ArrayList(playersOnCourtList)
                 val playersOnBenchCopy = ArrayList(playersOnBenchList)
                 val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"gameEnd", null, null)
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"gameEnd", null, null,null,null)
                 actions.push(thisAction)
                 onResume()
             }
@@ -336,18 +341,64 @@ class MainGameScreenActivity : AppCompatActivity() {
         })
         //TODO THIS MAY REQUIRE SPECIAL HANDLEING OF THE STACK
         endMatchBtn.setOnClickListener({
+            val li = LayoutInflater.from(this)
+            val promptsView = li.inflate(R.layout.end_match_prompt, null)
+            val alertDialogBuilder = AlertDialog.Builder(this)
+            alertDialogBuilder.setView(promptsView)
+            // set dialog message
+            alertDialogBuilder.setTitle("NOTICE!!!")
+            //alertDialogBuilder.setIcon(R.drawable)
+            // create alert dialog
+            val alertDialog = alertDialogBuilder.create()
+            val message = promptsView.findViewById<TextView>(R.id.matchEndMessage)
+            if(myTeamScore>otherTeamScore){
+                val myTeamGamesPossible = myTeamGames+1
+                message.setText("This will end the match "+myTeamGamesPossible + " to "+otherTeamGames)
+            }
+            else if(otherTeamScore>myTeamScore){
+                val otherTeamPossible = otherTeamGames+1
+                message.setText("This will end the match "+myTeamGames + " to "+otherTeamPossible)
+            }
+            else {
+                message.setText("This will end the match " + myTeamGames + " to " + otherTeamGames+" with a tie on the final game!")
+            }
+            val aButton = promptsView.findViewById<Button>(R.id.matchEndAccept) as Button
+            val cButton = promptsView.findViewById<Button>(R.id.matchEndCancel) as Button
+            cButton.setOnClickListener({
+                alertDialog.dismiss()
+            })
+            aButton.setOnClickListener({
+                val gameDB = DBHandler(this)
+                val scheduleID = gameDB.getTeamSchedule(playingTeam)
+                gameDB.insertGame(scheduleID.get(0),opponentName)
+                val gameID = gameDB.getGameID(scheduleID.get(0),opponentName)
+                //make method call to pop through the stack
+                recordStats(actions)
+                //either make this call here or in the recordStats method
+                for(i in 0..playersOnTeamList.size-1){
+                    gameDB.insertPlayerGameTable(playersOnTeamList.get(i),gameID)
+                }
+                alertDialog.dismiss()
+                finish()
 
+            })
+            alertDialog.show()
+            alertDialog.setCanceledOnTouchOutside(false)
         })
         oppTeamErrBtn.setOnClickListener({
             myTeamScore++
             if(!serveIndicator) {
                 serveIndicator = true
                 rotatePlayers()
+                serveAttempt=false
+            }
+            else{
+                serveAttempt=true
             }
             val playersOnCourtCopy = ArrayList(playersOnCourtList)
             val playersOnBenchCopy = ArrayList(playersOnBenchList)
             val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"otherTeamError", null, null)
+                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"otherTeamError", null, null,playersOnCourtList[0],serveAttempt)
             actions.push(thisAction)
             onResume()
         })
@@ -440,7 +491,7 @@ class MainGameScreenActivity : AppCompatActivity() {
         })
         player1ErrorBtn.setOnClickListener({
             otherTeamScoreInc()
-            createAction(0,"arrackErr")
+            createAction(0,"attackErr")
         })
         player1HitInPlayBtn.setOnClickListener({
             createAction(0,"hitInPlay")
@@ -771,13 +822,23 @@ class MainGameScreenActivity : AppCompatActivity() {
         myTeamScore++
         if(!serveIndicator){
             serveIndicator=true
+            serveAttempt=false
             rotatePlayers()
+        }
+        else{
+            serveAttempt=true
+            server=playersOnCourtList[0]
         }
     }
     fun otherTeamScoreInc(){
         otherTeamScore++
         if(serveIndicator){
             serveIndicator=false
+            serveAttempt=true
+            server=playersOnCourtList[0]
+        }
+        else{
+            serveAttempt=false
         }
     }
 
@@ -827,7 +888,7 @@ class MainGameScreenActivity : AppCompatActivity() {
             val playersOnCourtCopy = ArrayList(playersOnCourtList)
             val playersOnBenchCopy = ArrayList(playersOnBenchList)
             val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"sub", currentPlayer, chosenPlayer)
+                    otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"sub", currentPlayer, chosenPlayer,null,false)
             actions.push(thisAction)
             onResume()
         })
@@ -836,10 +897,11 @@ class MainGameScreenActivity : AppCompatActivity() {
     }
     //this function will create the action nodes
     fun createAction(p:Int,a:String){
+
         val playersOnCourtCopy = ArrayList(playersOnCourtList)
         val playersOnBenchCopy = ArrayList(playersOnBenchList)
         val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,a, playersOnCourtList[p], null)
+                otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,a, playersOnCourtList[p], null,playersOnCourtList[0],serveAttempt)
         actions.push(thisAction)
         onResume()
     }
@@ -881,5 +943,71 @@ class MainGameScreenActivity : AppCompatActivity() {
             playersOnCourtList.set(i,playersOnCourtList.get(i+1))
         }
         playersOnCourtList.set(5,tempPlayer)
+    }
+
+    //this function will go through the stack and add each stat to the player
+    //MAY DO THIS AT THE END OF EACH GAME RATHER THAN EACH MATCH
+    fun recordStats(stack:ActionStack){
+
+        while(stack.peek()!=null){
+            val currentAction = stack.pop()
+            if(currentAction.activePlayer!=null){
+                val currentActivePlayer = currentAction.activePlayer
+                val currentStat = currentAction.action
+                for(i in 0..playersOnTeamList.size-1) {
+                    if (playersOnTeamList.get(i).getID() == currentActivePlayer.getID()) {
+                        when (currentStat) {
+                            "ace" -> playersOnTeamList.get(i).incAces()
+                            "missServe" -> playersOnTeamList.get(i).incMissedServes()
+                            "serRecErr" -> playersOnTeamList.get(i).incSerRecErr()
+                            "kill" -> playersOnTeamList.get(i).incKills()
+                            "attackErr" -> playersOnTeamList.get(i).incAttackErrors()
+                            "passRecErr" -> playersOnTeamList.get(i).incPassRecErr()
+                            "dig" -> playersOnTeamList.get(i).incDigs()
+                            "assist" -> playersOnTeamList.get(i).incAssists()
+                            "ballErr" -> playersOnTeamList.get(i).incBallErrors()
+                            "block" -> playersOnTeamList.get(i).incSoloBlock()
+                            "blockAssist" -> playersOnTeamList.get(i).incBlockAssists()
+                            "blockErr" -> playersOnTeamList.get(i).incBlockErrors()
+                            "hitInPlay"-> playersOnTeamList.get(i).incHitsInPlay()
+                        }
+                        if(serveAttempt){
+                            val currentServer = currentAction.getServer()
+                            for(j in 0..playersOnTeamList.size-1){
+                                if(playersOnTeamList.get(j).getID()==currentServer.getID()) {
+                                    playersOnTeamList.get(j).incServeAttempts()
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        for(i in 0..playersOnTeamList.size-1) {
+            playersOnTeamList.get(i).setTotalAttacks(playersOnTeamList.get(i).getKills()+playersOnTeamList.get(i).getAttackErrors()+playersOnTeamList.get(i).getHitsInPlay())
+            val totalPassErr = playersOnTeamList.get(i).getReceptionErrors().toDouble()
+            val totalPass1 = playersOnTeamList.get(i).getPass1().toDouble()
+            val totalPass2 = playersOnTeamList.get(i).getPass2().toDouble()
+            val totalPass3 = playersOnTeamList.get(i).getPass3().toDouble()
+            val total = totalPass1+totalPass2+totalPass3+totalPassErr
+            val avg=0.0
+            if(total>0) {
+                val avg = ((totalPass3 * 3) + (totalPass2 * 2) + (totalPass1)) / total
+            }
+            playersOnTeamList.get(i).setPassPercentage(avg)
+            val totalKills = playersOnTeamList.get(i).getKills()
+            val totalHitsInPlay = playersOnTeamList.get(i).getHitsInPlay()
+            val totalAttackErrors = playersOnTeamList.get(i).getAttackErrors()
+            playersOnTeamList.get(i).setTotalAttacks(totalKills+totalHitsInPlay+totalAttackErrors)
+            val totalAttacks = playersOnTeamList.get(i).getTotalAttacks().toDouble()
+            val killsMinusErrors = (totalKills-totalAttackErrors).toDouble()
+            playersOnTeamList.get(i).setHittingPercentage(killsMinusErrors/totalAttacks)
+
+            //playersOnTeamList.get(i).setServeAttempts(playersOnTeamList.get(i).getAces()+playersOnTeamList.get(i).getMissedServes())
+        }
+        //RETURN to endMatch Method so that the players stats can each be inserted to the DB
+
     }
 }

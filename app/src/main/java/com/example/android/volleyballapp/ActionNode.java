@@ -25,9 +25,11 @@ public class ActionNode {
     private String action;
     private Player activePlayer;
     private Player subbedForPlayer;
+    private Player server;
+    private boolean serveAttempt;
     private ActionNode below;
     ActionNode(List<Player> poc,List<Player> pob, Player l, int mts, int ots, int mtg, int otg,
-               boolean s, int msu, int r, int mto, int oto, String a, Player ap, Player sfp){
+               boolean s, int msu, int r, int mto, int oto, String a, Player ap, Player sfp,Player ser,Boolean sa){
         playersOnCourtList = poc;
         playersOnBenchList = pob;
         libPlayer = l;
@@ -43,6 +45,8 @@ public class ActionNode {
         action = a;
         activePlayer = ap;
         subbedForPlayer = sfp;
+        server = ser;
+        serveAttempt=sa;
     }
     public void setBelow(ActionNode b){
         below = b;
@@ -90,5 +94,11 @@ public class ActionNode {
     }
     public Player getSubbedForPlayer(){
         return subbedForPlayer;
+    }
+    public Player getServer(){
+        return server;
+    }
+    public Boolean getServeAttempt(){
+        return serveAttempt;
     }
 }
