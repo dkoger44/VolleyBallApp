@@ -791,31 +791,31 @@ class MainGameScreenActivity : AppCompatActivity() {
         player6HitInPlayBtn.setOnClickListener({
             createAction(5,"hitInPlay")
         })
-        player5PassRecErrBtn.setOnClickListener({
+        player6PassRecErrBtn.setOnClickListener({
             otherTeamScoreInc()
-            createAction(4,"passRecErr")
+            createAction(5,"passRecErr")
         })
-        player5DigBtn.setOnClickListener({
-            createAction(4,"dig")
+        player6DigBtn.setOnClickListener({
+            createAction(5,"dig")
         })
-        player5Pass1Btn.setOnClickListener({
-            createAction(4,"pass1")
+        player6Pass1Btn.setOnClickListener({
+            createAction(5,"pass1")
         })
-        player5Pass2Btn.setOnClickListener({
-            createAction(4,"pass2")
+        player6Pass2Btn.setOnClickListener({
+            createAction(5,"pass2")
         })
-        player5Pass3Btn.setOnClickListener({
-            createAction(4,"pass3")
+        player6Pass3Btn.setOnClickListener({
+            createAction(5,"pass3")
         })
-        player5AssistBtn.setOnClickListener({
-            createAction(4,"assist")
+        player6AssistBtn.setOnClickListener({
+            createAction(5,"assist")
         })
-        player5BallErrBtn.setOnClickListener({
+        player6BallErrBtn.setOnClickListener({
             otherTeamScoreInc()
-            createAction(4,"ballErr")
+            createAction(5,"ballErr")
         })
-        player5SubBtn.setOnClickListener({
-            subButtonHelper(4)
+        player6SubBtn.setOnClickListener({
+            subButtonHelper(5)
         })
     }
     fun myTeamScoreInc(){
@@ -907,28 +907,30 @@ class MainGameScreenActivity : AppCompatActivity() {
     }
     //this function is for rotating the players on the court
     fun rotatePlayers(){
-        if(!libPlayer.equals(intialLibPlayer)){
-            val li = LayoutInflater.from(this)
-            val promptsView = li.inflate(R.layout.lib_rotate_out, null)
-            val alertDialogBuilder = AlertDialog.Builder(this)
-            alertDialogBuilder.setView(promptsView)
-            // set dialog message
-            alertDialogBuilder.setTitle("NOTICE!!!")
-            //alertDialogBuilder.setIcon(R.drawable)
-            // create alert dialog
-            val alertDialog = alertDialogBuilder.create()
-            val mButton = promptsView.findViewById<Button>(R.id.libRotateOkBtn) as Button
-            mButton.setOnClickListener({
-                alertDialog.dismiss()
-            })
-            alertDialog.show()
-            alertDialog.setCanceledOnTouchOutside(false)
-            var currentPlayer = libPlayer
-            for(i in 0..playersOnCourtList.size-1){
-                if(playersOnCourtList[i].equals(intialLibPlayer)){
-                    libPlayer = intialLibPlayer
-                    playersOnCourtList.set(i,currentPlayer)
-                    break;
+        if(playersOnCourtList.get(4).equals(intialLibPlayer)) {
+            if (!libPlayer.equals(intialLibPlayer)) {
+                val li = LayoutInflater.from(this)
+                val promptsView = li.inflate(R.layout.lib_rotate_out, null)
+                val alertDialogBuilder = AlertDialog.Builder(this)
+                alertDialogBuilder.setView(promptsView)
+                // set dialog message
+                alertDialogBuilder.setTitle("NOTICE!!!")
+                //alertDialogBuilder.setIcon(R.drawable)
+                // create alert dialog
+                val alertDialog = alertDialogBuilder.create()
+                val mButton = promptsView.findViewById<Button>(R.id.libRotateOkBtn) as Button
+                mButton.setOnClickListener({
+                    alertDialog.dismiss()
+                })
+                alertDialog.show()
+                alertDialog.setCanceledOnTouchOutside(false)
+                var currentPlayer = libPlayer
+                for (i in 0..playersOnCourtList.size - 1) {
+                    if (playersOnCourtList[i].equals(intialLibPlayer)) {
+                        libPlayer = intialLibPlayer
+                        playersOnCourtList.set(i, currentPlayer)
+                        break;
+                    }
                 }
             }
         }
