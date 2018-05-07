@@ -247,7 +247,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                     val playersOnCourtCopy = ArrayList(playersOnCourtList)
                     val playersOnBenchCopy = ArrayList(playersOnBenchList)
                     val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                            otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "libSwap", currentPlayer, chosenPlayer,null,null)
+                            otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "libSwap", currentPlayer, chosenPlayer,null,false)
                     actions.push(thisAction)
                     onResume()
                 })
@@ -266,7 +266,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                 val playersOnCourtCopy = ArrayList(playersOnCourtList)
                 val playersOnBenchCopy = ArrayList(playersOnBenchList)
                 val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "reverseLibSwap", currentPlayer, intialLibPlayer,null,null)
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "reverseLibSwap", currentPlayer, intialLibPlayer,null,false)
                 actions.push(thisAction)
                 onResume()
             }
@@ -284,7 +284,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                 val playersOnCourtCopy = ArrayList(playersOnCourtList)
                 val playersOnBenchCopy = ArrayList(playersOnBenchList)
                 val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "ourTO", null, null,null,null)
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "ourTO", null, null,null,false)
                 actions.push(thisAction)
                 onResume()
             }
@@ -298,7 +298,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                 val playersOnCourtCopy = ArrayList(playersOnCourtList)
                 val playersOnBenchCopy = ArrayList(playersOnBenchList)
                 val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "otherTeamUseTO", null, null,null,null)
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation, myTO, otherTeamTO, "otherTeamUseTO", null, null,null,false)
                 actions.push(thisAction)
                 onResume()
             }
@@ -319,7 +319,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                 val playersOnCourtCopy = ArrayList(playersOnCourtList)
                 val playersOnBenchCopy = ArrayList(playersOnBenchList)
                 val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"gameEnd", null, null,null,null)
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"gameEnd", null, null,null,false)
                 actions.push(thisAction)
                 onResume()
             }
@@ -330,7 +330,7 @@ class MainGameScreenActivity : AppCompatActivity() {
                 val playersOnCourtCopy = ArrayList(playersOnCourtList)
                 val playersOnBenchCopy = ArrayList(playersOnBenchList)
                 val thisAction = ActionNode(playersOnCourtCopy, playersOnBenchCopy, libPlayer, myTeamScore,
-                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"gameEnd", null, null,null,null)
+                        otherTeamScore, myTeamGames, otherTeamGames, serveIndicator, mySubsUsed, rotation,myTO,otherTeamTO,"gameEnd", null, null,null,false)
                 actions.push(thisAction)
                 onResume()
             }
