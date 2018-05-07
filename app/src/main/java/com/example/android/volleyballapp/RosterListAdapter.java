@@ -79,7 +79,7 @@ public class RosterListAdapter extends BaseAdapter implements ListAdapter {
 
         // TEST FOR CROWDED LAYOUT
         Button viewEditTeamBtn = (Button) view.findViewById(R.id.viewEditTeamButton);
-        Button scheduleBtn = (Button) view.findViewById(R.id.scheduleButton);
+        //Button scheduleBtn = (Button) view.findViewById(R.id.scheduleButton);
         //Button statsBtn = (Button) view.findViewById(R.id.statsButton);
 
 
@@ -119,7 +119,7 @@ public class RosterListAdapter extends BaseAdapter implements ListAdapter {
             }
         });
 
-        scheduleBtn.setOnClickListener(new View.OnClickListener() {
+        /*scheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //do something
@@ -132,7 +132,7 @@ public class RosterListAdapter extends BaseAdapter implements ListAdapter {
                 viewSchedule.putExtra("TeamObject",selTeam);
                 v.getContext().startActivity(viewSchedule);
             }
-        });
+        });*/
     /*
         statsBtn.setOnClickListener(new View.OnClickListener() {
             @Override

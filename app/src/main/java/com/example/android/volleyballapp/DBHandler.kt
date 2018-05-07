@@ -215,18 +215,23 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         db?.execSQL(createPlayerGameTable)
     }
-    fun selectAllFromGameTable(){
+    fun selectAllFromGameTable():MutableList<Int>{
         val db = this.readableDatabase
+        var list : MutableList<Int> = ArrayList()
         val projection = arrayOf(COL_GAME_GAMEID,COL_GAME_DATE,COL_GAME_LOCATION,COL_GAME_OPPONENT
                 ,COL_GAME_SCHEDULEID)
         val cursor = db.query(GAME_TABLE_NAME,projection,null,null,null,null,null)
         if(cursor.moveToFirst()){
             do{
                 Log.d("gameID","Is "+cursor.getInt(0))
+                list.add(cursor.getInt(0))
+                Log.d("opponent", "Is "+cursor.getString(3).toString())
+                Log.d("scheduleID", "Is "+cursor.getInt(4))
             }while(cursor.moveToNext())
         }
         cursor.close()
         db.close()
+        return list
     }
     //get player stats from PlayerGameTable
     fun getPlayerStats(player:Player,gameID:Int){
@@ -247,14 +252,14 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     player.setKills(cursor.getInt(2).toString().toInt())
                     player.setAttackErrors(cursor.getInt(3).toString().toInt())
                     player.setTotalAttacks(cursor.getInt(4).toString().toInt())
-                    player.setHittingPercentage(cursor.getString(5).toString().toDouble())
+                    //player.setHittingPercentage(cursor.getString(5).toString().toDouble())
                     player.setAssists(cursor.getInt(6).toString().toInt())
                     player.setBallErrors(cursor.getInt(7).toString().toInt())
                     player.setAces(cursor.getInt(8).toString().toInt())
                     player.setServeAttempts(cursor.getInt(9).toString().toInt())
                     player.setReceptionErrors(cursor.getInt(10).toString().toInt())
                     player.setReceptionAttempts(cursor.getInt(11).toString().toInt())
-                    player.setPassPercentage(cursor.getString(12).toString().toDouble())
+                    //player.setPassPercentage(cursor.getString(12).toString().toDouble())
                     player.setDigs(cursor.getInt(13).toString().toInt())
                     player.setSoloBlock(cursor.getInt(14).toString().toInt())
                     player.setBlockAssists(cursor.getInt(15).toString().toInt())

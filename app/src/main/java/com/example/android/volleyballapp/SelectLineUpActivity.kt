@@ -32,7 +32,7 @@ class SelectLineUpActivity : AppCompatActivity() {
 
         //declaring editText field
         val opName = findViewById<EditText>(R.id.opponentEditText) as EditText
-        val opponent = opName.text.toString()
+
 
         //declaring buttons
         val homeBtn = findViewById<Button>(R.id.rosterHomeButton) as Button
@@ -216,6 +216,7 @@ class SelectLineUpActivity : AppCompatActivity() {
                     intent.putExtra("libero",startingPlayersList[6])
                     liberoCheck = true
                 }
+                val opponent = opName.text.toString()
                 //pass opposing team name
                 intent.putExtra("Opponent Name",opponent)
 

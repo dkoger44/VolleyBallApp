@@ -7,10 +7,9 @@
     tools:context="com.example.android.volleyballapp.PlayerStatView">
 
     <RelativeLayout
+        android:layout_marginLeft="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
 
         <TextView
             android:id="@+id/playerNameForStat"
@@ -19,7 +18,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:text="PLAYER NAME"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +31,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Opponents"
+            android:text=""
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/playerNameForStat"
@@ -66,7 +65,7 @@
                             android:id="@+id/textView13"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="opponentnames" />
+                            android:text="                  " />
                     </TableRow>
 
                     <TableRow
@@ -110,9 +109,9 @@
                             android:id="@+id/Row5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Attack" />
+                            android:text="Total Attack " />
                     </TableRow>
-                    <TableRow
+                  <!--  <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -121,7 +120,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Hit %" />
-                    </TableRow>
+                    </TableRow>-->
 
                     <TableRow
                         android:layout_width="match_parent"
@@ -185,7 +184,7 @@
                             android:layout_height="wrap_content"
                             android:text="Attempts" />
                     </TableRow>
-                    <TableRow
+                  <!--  <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -194,8 +193,79 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Serving %" />
-                    </TableRow>
+                    </TableRow>-->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
+                        <TextView
+                            android:id="@+id/Row13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PASSING"
+                            android:background="#555f"/>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rec Error" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Digs" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="BLOCKING"
+                            android:background="#555f"/>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row17"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Blocks" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row18"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Block Assist" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row19"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Block Error" />
+                    </TableRow>
                 </TableLayout>
 
                 <HorizontalScrollView
@@ -261,7 +331,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="game1row4" />
                         </TableRow>
-                        <TableRow
+                      <!--  <TableRow
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" >
 
@@ -270,7 +340,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="game1row4" />
-                        </TableRow>
+                        </TableRow>-->
                         <TableRow
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" >
@@ -333,7 +403,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="game1row4" />
                         </TableRow>
-                        <TableRow
+                      <!--  <TableRow
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" >
 
@@ -342,6 +412,78 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="game1row4" />
+                        </TableRow>-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/row20"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:background="#555f"/>
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/game1PassRecERR"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/game1Digs"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Digs" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/Row21"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:background="#555f"/>
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/game1Blocks"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Blocks" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/game1BlockAssist"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Block Assist" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/game1BlockErr"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Block Error" />
                         </TableRow>
                     </TableLayout>
 
@@ -357,11 +499,17 @@
 
 
 
-
+        <Spinner
+            android:id="@+id/gameIDSelector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
 
 
         <!--bottom -->
     </RelativeLayout>
+
+
 
 
 </android.support.constraint.ConstraintLayout>
