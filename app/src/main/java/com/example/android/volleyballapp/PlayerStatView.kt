@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_player_stat_view.*
 import org.w3c.dom.Text
 
 class PlayerStatView : AppCompatActivity() {
-var selectedID = 1
+var selectedID = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player_stat_view)
@@ -19,7 +19,10 @@ var selectedID = 1
         val previousIntent = getIntent()
         val playerID = previousIntent.getStringExtra("PlayerID")
         val statDB = DBHandler(this)
-        val gameIDArrays = statDB.selectAllFromGameTable()
+        val chosenPlayer = statDB.readSinglePlayerData(playerID).get(0)
+        val playersTeam = Team(chosenPlayer.getTeamName())
+        val scheduleID = statDB.getTeamSchedule(playersTeam).get(0)
+        val gameIDArrays = statDB.selectAllFromGameTable(scheduleID)
         val gameSelector = findViewById<Spinner>(R.id.gameIDSelector) as Spinner
         val gameAdapter = ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item,gameIDArrays)
         gameSelector.setAdapter(gameAdapter)
@@ -32,7 +35,7 @@ var selectedID = 1
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }
-        val chosenPlayer = statDB.readSinglePlayerData(playerID).get(0)
+
         statDB.getPlayerStats(chosenPlayer,selectedID)
         val opponentsName = statDB.getOpponentName(selectedID)
         val playerNameText = findViewById<TextView>(R.id.playerNameForStat) as TextView
@@ -75,8 +78,10 @@ var selectedID = 1
         val previousIntent = getIntent()
         val playerID = previousIntent.getStringExtra("PlayerID")
         val statDB = DBHandler(this)
-        val gameIDArrays = statDB.selectAllFromGameTable()
         val chosenPlayer = statDB.readSinglePlayerData(playerID).get(0)
+        val playersTeam = Team(chosenPlayer.getTeamName())
+        val scheduleID = statDB.getTeamSchedule(playersTeam).get(0)
+        val gameIDArrays = statDB.selectAllFromGameTable(scheduleID)
         statDB.getPlayerStats(chosenPlayer,selectedID)
         val opponentsName = statDB.getOpponentName(selectedID)
 
