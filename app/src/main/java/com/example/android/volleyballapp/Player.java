@@ -36,6 +36,7 @@ public class Player implements Serializable{
     private int pass3=0;
     private double passPercentage = 0;
     private double hittingPercentage =0;
+    private String teamName;
 
 
     //also need variable to hold either picture or picture location so
@@ -63,6 +64,9 @@ public class Player implements Serializable{
     }
 
     //setters
+    public void setTeamName(String tn){
+        teamName = tn;
+    }
     public void setHittingPercentage(double h){
         hittingPercentage = h;
     }
@@ -215,7 +219,9 @@ public class Player implements Serializable{
     }
 
     //getters
-
+    public String getTeamName(){
+        return teamName;
+    }
     public double getHittingPercentage(){
         return hittingPercentage;
     }

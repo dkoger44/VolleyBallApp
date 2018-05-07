@@ -215,12 +215,14 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         db?.execSQL(createPlayerGameTable)
     }
-    fun selectAllFromGameTable():MutableList<Int>{
+    fun selectAllFromGameTable(scheduleID:String):MutableList<Int>{
         val db = this.readableDatabase
         var list : MutableList<Int> = ArrayList()
+        val selection = COL_GAME_SCHEDULEID + "=?"
+        val idArray = arrayOf(scheduleID)
         val projection = arrayOf(COL_GAME_GAMEID,COL_GAME_DATE,COL_GAME_LOCATION,COL_GAME_OPPONENT
                 ,COL_GAME_SCHEDULEID)
-        val cursor = db.query(GAME_TABLE_NAME,projection,null,null,null,null,null)
+        val cursor = db.query(GAME_TABLE_NAME,projection,selection,idArray,null,null,null)
         if(cursor.moveToFirst()){
             do{
                 Log.d("gameID","Is "+cursor.getInt(0))
@@ -493,7 +495,7 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         if(playerID != null){
             val selection = COL_PLAYER_ID + " =?"
             var playerIDNUM = arrayOf(playerID)
-            val projection = arrayOf(COL_PLAYER_ID, COL_PLAYER_FIRST_NAME, COL_PLAYER_LAST_NAME, COL_PLAYER_JERSEY, COL_PLAYER_GRADE)
+            val projection = arrayOf(COL_PLAYER_ID, COL_PLAYER_FIRST_NAME, COL_PLAYER_LAST_NAME, COL_PLAYER_JERSEY, COL_PLAYER_GRADE,COL_PLAYER_TEAM_NAME)
 
             val cursor = db.query(PLAYER_TABLE_NAME, projection, selection, playerIDNUM, null, null, null)
             if(cursor.moveToFirst()){
@@ -503,7 +505,9 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     var ln = cursor.getString(2).toString()
                     var jn = cursor.getString(3).toString()
                     var pg = cursor.getString(4).toString()
+                    var tn = cursor.getString(5).toString()
                     var player = Player(id.toInt(), fn, ln, jn.toInt(), pg)
+                    player.setTeamName(tn)
                     list.add(player)
                 }while(cursor.moveToNext())
             }
@@ -531,7 +535,9 @@ class DBHandler (var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     var ln = cursor.getString(2).toString()
                     var jn = cursor.getString(3).toString()
                     var pg = cursor.getString(4).toString()
+
                     var player = Player(id.toInt(), fn, ln, jn.toInt(), pg)
+
                     list.add(player)
                 } while (cursor.moveToNext())
             }
