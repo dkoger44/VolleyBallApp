@@ -54,6 +54,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="50dp"
         android:text="@string/settings_button"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rosterButton" />
@@ -66,6 +67,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="50dp"
         android:text="@string/help_button"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsButton" />
