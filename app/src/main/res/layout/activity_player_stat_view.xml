@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.volleyballapp.PlayerStatView">
+
+    <RelativeLayout
+        android:layout_marginLeft="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/playerNameForStat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="PLAYER NAME"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/statColTableHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/playerNameForStat"
+            android:layout_below="@+id/playerNameForStat"
+            android:layout_centerHorizontal="true"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_below="@+id/statColTableHeader">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TableLayout
+                    android:id="@+id/leftHanddHeaders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    >
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="                  " />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView20"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ATTACK"
+                            android:background="#555f"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView23"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kills" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Errors" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Attack " />
+                    </TableRow>
+                  <!--  <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hit %" />
+                    </TableRow>-->
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="SETTING"
+                            android:background="#555f"/>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Assists" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ball Errors" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="SERVING"
+                            android:background="#555f"/>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Aces" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Attempts" />
+                    </TableRow>
+                  <!--  <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Serving %" />
+                    </TableRow>-->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PASSING"
+                            android:background="#555f"/>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rec Error" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Digs" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="BLOCKING"
+                            android:background="#555f"/>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row17"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Blocks" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row18"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Block Assist" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/Row19"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Block Error" />
+                    </TableRow>
+                </TableLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TableLayout
+                        android:id="@+id/gameColumns"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/game1OppName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="game1Row1" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/textView26"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:background="#555f"/>
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/game1Kills"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="game1row3" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/game1AttackErrors"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="game1row4" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/game1TotalAttacks"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="game1row4" />
+                        </TableRow>
+                      <!--  <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/game1HittingPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="game1row4" />
+                        </TableRow>-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/textView27"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:background="#555f"/>
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/game1Assists"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="game1row4" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/game1BallErrors"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="game1row4" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/textView28"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:background="#555f"/>
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/game1ServeAces"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="game1row4" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/game1ServeAttempts"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="game1row4" />
+                        </TableRow>
+                      <!--  <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" >
+
+                            <TextView
+                                android:id="@+id/game1ServePercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="game1row4" />
+                        </TableRow>-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/row20"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:background="#555f"/>
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/game1PassRecERR"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/game1Digs"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Digs" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/Row21"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:background="#555f"/>
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/game1Blocks"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Blocks" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/game1BlockAssist"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Block Assist" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/game1BlockErr"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Block Error" />
+                        </TableRow>
+                    </TableLayout>
+
+                </HorizontalScrollView>
+            </LinearLayout>
+        </ScrollView>
+
+
+
+
+
+
+
+
+
+        <Spinner
+            android:id="@+id/gameIDSelector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+
+
+        <!--bottom -->
+    </RelativeLayout>
+
+
+
+
+</android.support.constraint.ConstraintLayout>
